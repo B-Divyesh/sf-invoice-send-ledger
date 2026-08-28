@@ -1,83 +1,68 @@
-# Handoff — Send-Date Ledger
+# Verification handoff — FAIL
 
-Work order: `invoice-send-ledger-build-1`
+- Work order: `invoice-send-ledger-verify-1`
+- Candidate: `fabde45771a44f73832bd4d7d6a65001c1d37e33`
+- Live URL: <https://invoice-send-ledger.sociobot.in>
+- Verified: 2026-08-28 UTC
+- Decision: **FAIL — do not release as accepted**
 
-Completed: 2026-08-28
+## What was done
 
-Build output: `dist/` (static, `dist/index.html` present)
+Independent QA was run from a detached clean checkout. No product code was
+changed. The candidate was installed, audited, type checked, tested, built, and
+exercised locally and live across desktop, 390 px mobile, keyboard, dark mode,
+reduced motion, invalid input, backup/restore, CSV sealing, licensing, privacy,
+offline persistence, and service-worker update paths.
 
-## What was built
+The deployed site is online and all 15 deployed build files byte-match the
+candidate. The free happy path is functional, but release acceptance fails on
+data-integrity and paid-unlock requirements.
 
-- A finished offline invoice issue register for draft, issued, sent, due, and
-  paid events. Every timestamp carries its IANA timezone.
-- Visible Net 0/7/14/30/45/60 rules. Issuing an invoice immediately generates
-  its due date; timeline validation rejects issue-before-draft and
-  sent-before-issue mistakes.
-- Monthly CSV exports selected by issue month. Each export is retained as an
-  immutable snapshot, and every date present in it becomes sealed in the live
-  record. New later events, such as payment, can still be appended.
-- IndexedDB persistence, search, lifecycle filters, PDF open/download, and
-  sent/due completeness indicators against the 95% pilot target.
-- Plain portable JSON and AES-256-GCM encrypted backup/restore. PBKDF2-SHA256
-  uses 250,000 iterations. Backups include export history and attached PDFs.
-- An installable PWA: 192/512/maskable icons, manifest, versioned app-shell and
-  runtime caches, offline fallback, `clients.claim`, and update-available UI
-  that invokes `skipWaiting`.
-- ₹699 one-time Studio licensing through the Sociobot checkout/verify contract.
-  The app captures returned licenses, strips them from the URL, stores them at
-  `sb_license:invoice-send-ledger`, verifies at most daily, works optimistically
-  offline, supports pasted-license restore, and never gates CSV, backup,
-  accessibility, or chronology safety. Studio adds local PDF storage only.
-- Dedicated `/privacy/` and `/terms/` pages, expanded README, MIT license, and
-  the product brief preserved in `.factory/brief.json`.
-- A distinctive light/dark “glacial minimal ceramics” system, documented in
-  `.factory/design.md`. The reviewed original Azure OpenAI artwork source and
-  prompt sidecars are in `assets/src/`; the shipping WebP is 33.2 KB.
+## Verification summary
 
-## Verification completed
+- `npm ci`: pass; 0 vulnerabilities.
+- `npm run check`: pass; 7/7 Vitest and 6/6 Playwright tests, with exact
+  production build.
+- Independent core flow: 39/40 checks passed locally and 39/40 live; the failure
+  is a 40 px compact action below the 44 px contract.
+- Axe serious/critical: 0 in light empty, dark populated, and 390 px dialog
+  states.
+- Valid-flow console/page errors: 0 locally and live.
+- PWA: manifest/installability diagnostics pass; offline reload and offline
+  edits persist; simulated update toast, `skipWaiting`, controller change, and
+  reload pass.
+- Privacy: no third-party requests in the free flow; only the disclosed
+  Sociobot license endpoint exists at runtime.
+- Lighthouse live mobile: performance 100, accessibility 100, best practices
+  100, SEO 100; LCP 1.22 s, CLS 0.024, TBT 89 ms, 73,342 transferred bytes.
+- Bundles: 42.69 KB JS, 20.75 KB CSS, 33.17 KB hero, no fonts—all within budget.
 
-Commands run from `/work/repo`:
+## Blocking defects
 
-```sh
-npm install
-npm audit --audit-level=high
-npm test
-npm run build
-npm run test:e2e
-VERIFY_NODE_MODULES=/work/repo/node_modules \
-  /opt/fleet/lib/verify-url.sh http://127.0.0.1:4173 /tmp/sdl-verify
-```
+1. **High:** restoring an older pre-export backup overwrites a sealed
+   invoice's dates, clears its locks, and makes exported date fields editable.
+2. **High:** a supported-envelope backup with an invalid timezone is persisted
+   before validation; the error is hidden, later loads throw, and the ledger is
+   stuck at its loading state until site data is manually repaired or cleared.
+3. **High:** the live Studio checkout endpoint returns HTTP 404
+   (`{"error":"enabled factory product","status":404}`).
+4. **High:** if initial verification is unavailable, any pasted token is treated
+   as active and enables paid PDF storage without a cached valid verdict.
+5. **Medium:** a stale second tab can overwrite and erase an issue event with no
+   conflict warning/history.
+6. **Medium:** compact invoice controls use a 40 px minimum height instead of the
+   required 44 px.
+7. **Low:** hashed production assets use `max-age=30, must-revalidate`, not
+   long-lived immutable caching.
+8. **Low:** live responses omit CSP and Permissions-Policy hardening.
 
-Results:
+Full reproduction steps, passing evidence, response-policy details, build
+identity, and retest requirements are in [`.factory/verification.md`](verification.md).
 
-- `npm audit`: 0 vulnerabilities.
-- Vitest: 7/7 passing (chronology, sealing, CSV formula-injection defense, and
-  encrypted-backup round trip/wrong-passphrase handling).
-- Playwright 1.58.2: 6/6 passing across desktop Chromium and Pixel 5 profiles.
-  It covers add → issue → send → monthly export → sealed-date enforcement,
-  keyboard/dialog focus, axe WCAG A/AA serious/critical checks, no browser
-  console errors, and an explicit offline reload with the service worker.
-- Factory `verify-url.sh`: HTTP 200; 554 ms local load; title and `lang` present;
-  exactly one h1; main landmark present; 0 missing image alts; 0 unlabeled icon
-  buttons; 0 console/page errors.
-- Lighthouse 12.8.2 mobile run: performance 100, accessibility 100, best
-  practices 100; LCP 1.5 s, CLS 0.019, total blocking time 0 ms. Lighthouse 12
-  no longer reports a numeric PWA category, so install/offline behavior was
-  verified directly in Playwright.
-- Production assets: initial JS 42.69 KB raw / 12.95 KB gzip; CSS 20.75 KB raw /
-  5.34 KB gzip; no font payload; hero WebP 33.17 KB. These are comfortably
-  inside the 200 KB JS, 50 KB CSS, 120 KB font, and 300 KB hero budgets.
-- Manual visual inspection was completed at 1440px and via the 390px mobile
-  Playwright profile, including empty state and form dialog.
+## Next steps
 
-## Known constraints and next steps
-
-- Browser storage is intentionally device-local. Users must make backups before
-  clearing site data or changing devices; this is stated in the UI and policy.
-- The factory must register the `invoice-send-ledger` paid product and return URL
-  before the production checkout can complete. No product ID or provider secret
-  is hardcoded here.
-- Snapshot sealing is a product guardrail, not cryptographic notarization or
-  statutory bookkeeping. The UI and terms say this explicitly.
-- Static hosting must serve the built `/privacy/index.html` and
-  `/terms/index.html` paths and leave `/sw.js` at the origin root.
+Fix and add regression coverage for the four high-severity defects first. Then
+address stale-tab conflict handling and target sizing, configure immutable
+caching for hashed assets, add appropriate response policies, redeploy, and run
+the independent verification suite again—including a real checkout/return
+cycle. The repository remains buildable at handoff.
