@@ -1,6 +1,7 @@
 const PRODUCT_SLUG = document.documentElement.dataset.product ?? 'invoice-send-ledger';
 const LICENSE_KEY = `sb_license:${PRODUCT_SLUG}`;
 const VERDICT_KEY = `sb_license_verdict:${PRODUCT_SLUG}`;
+const ATTEMPT_KEY = `sb_license_attempt:${PRODUCT_SLUG}`;
 const API_BASE = 'https://api.sociobot.in/api/v1';
 const DAY = 86_400_000;
 
@@ -30,6 +31,7 @@ export function captureReturnedLicense(): void {
   if (!token) return;
   localStorage.setItem(LICENSE_KEY, token.trim());
   localStorage.removeItem(VERDICT_KEY);
+  localStorage.removeItem(ATTEMPT_KEY);
   url.searchParams.delete('license');
   history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
 }
@@ -47,6 +49,9 @@ export async function verifyLicense(force = false): Promise<LicenseState> {
   if (!token) return { token: null, unlocked: false };
   const cached = readVerdict();
   if (!force && cached && Date.now() - cached.checkedAt < DAY) return { token, unlocked: cached.valid, reason: cached.reason };
+  const lastAttempt = Number(localStorage.getItem(ATTEMPT_KEY) ?? 0);
+  if (!force && lastAttempt && Date.now() - lastAttempt < DAY) return licenseState();
+  localStorage.setItem(ATTEMPT_KEY, String(Date.now()));
   try {
     const response = await fetch(`${API_BASE}/products/${PRODUCT_SLUG}/verify?license=${encodeURIComponent(token)}`);
     if (!response.ok) throw new Error('Verification service unavailable.');
@@ -64,11 +69,13 @@ export function saveLicense(token: string): void {
   if (!clean) throw new Error('Paste a license token first.');
   localStorage.setItem(LICENSE_KEY, clean);
   localStorage.removeItem(VERDICT_KEY);
+  localStorage.removeItem(ATTEMPT_KEY);
 }
 
 export function clearLicense(): void {
   localStorage.removeItem(LICENSE_KEY);
   localStorage.removeItem(VERDICT_KEY);
+  localStorage.removeItem(ATTEMPT_KEY);
 }
 
 export const checkoutUrl = `${API_BASE}/products/${PRODUCT_SLUG}/checkout`;

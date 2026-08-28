@@ -1,0 +1,30 @@
+{
+  "slug": "invoice-send-ledger",
+  "title": "Send-Date Ledger",
+  "territory": "utilities",
+  "user": "Freelancers who draft an invoice while work evolves and need the issued date, due date, and sent version to remain unambiguous.",
+  "evidence": [
+    {
+      "url": "https://hn.algolia.com/api/v1/items/42607269",
+      "date": "2025-01-06",
+      "quote_or_summary": "An invoicing-platform builder identifies freelancer frustration with forced payment methods and over-complicated small-business interfaces."
+    },
+    {
+      "url": "https://github.com/invoiceninja/invoiceninja/issues/11675",
+      "date": "2026-02-11",
+      "quote_or_summary": "A user says invoices can be created weeks before send while work is added, and asks that the invoice date reflect sending rather than draft creation."
+    }
+  ],
+  "recurrence": "A 2025 request for less-bloated freelancer invoicing and a concrete 2026 date-error request point to an avoidable record-keeping failure.",
+  "current_workaround": "Edit dates by hand in an invoice app or duplicate a draft just before emailing it.",
+  "incumbents_and_gap": "FreshBooks, Wave, and Invoice Ninja manage complete invoices, but draft-versus-issued chronology is rarely a small, visible, exportable control.",
+  "smallest_useful_product": "Offline invoice issue register: import or enter a PDF/amount, record draft, issued, sent, due, and paid events, and export a monthly ledger. Non-goals: accounting ledger, tax calculation, or payment gateway.",
+  "success_measure": "For a pilot month, 95% of issued invoices have a recorded sent date and a due date generated from a visible rule.",
+  "artifact_class": "pwa-offline",
+  "monetization": "one-time — local audit hygiene is a focused utility rather than a financial SaaS suite.",
+  "constraints": "Dates must be timezone-aware and immutable once exported; do not present the register as statutory bookkeeping; browser storage needs encrypted export option.",
+  "est_build_effort": "S",
+  "why_distinct": "It is a chronology guardrail around existing invoices, not another invoice creator.",
+  "confidence": 4,
+  "state": "RESEARCHED"
+}
