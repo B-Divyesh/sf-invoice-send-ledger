@@ -43,6 +43,10 @@ test('@claim:demo-isolation keeps sample changes away from real records', async 
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
   await expect(page.getByText('REAL-KEEP-001')).toHaveCount(0);
   await expect(page.locator('.invoice-slip')).toHaveCount(3);
+  await page.locator('.invoice-slip').filter({ hasText: 'MOSS-118' }).getByRole('button', { name: 'Record sent' }).click();
+  await expect(page.locator('.invoice-slip').filter({ hasText: 'MOSS-118' }).getByRole('button', { name: 'Record sent' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Reset demo' }).click();
+  await expect(page.locator('.invoice-slip').filter({ hasText: 'MOSS-118' }).getByRole('button', { name: 'Record sent' })).toBeVisible();
   await page.getByRole('link', { name: 'Start for real' }).click();
   await expect(page.getByRole('heading', { name: 'REAL-KEEP-001' })).toBeVisible();
   await expect(page.getByText('NORTH-026')).toHaveCount(0);
@@ -56,9 +60,18 @@ test('@claim:due-date calculates a visible due date from the selected rule', asy
   await page.locator('#client').fill('Calendar Studio');
   await page.getByLabel('Amount').fill('900');
   await page.getByLabel('Issued').fill('2026-08-02T10:00');
-  await page.getByLabel('Due rule').selectOption('30');
-  await expect(page.locator('#due-preview')).toContainText('Sep 01, 2026');
+  for (const [days, result] of [['0', 'Aug 02, 2026'], ['7', 'Aug 09, 2026'], ['14', 'Aug 16, 2026'], ['30', 'Sep 01, 2026'], ['45', 'Sep 16, 2026'], ['60', 'Oct 01, 2026']]) {
+    await page.getByLabel('Due rule').selectOption(days);
+    await expect(page.locator('#due-preview')).toContainText(result);
+  }
   await page.screenshot({ path: evidence('claim-due-date') });
+});
+
+test('@claim:time-zone keeps the recorded IANA time zone beside invoice dates', async ({ page }) => {
+  await freshDemo(page);
+  const slip = page.locator('.invoice-slip').filter({ hasText: 'MOSS-118' });
+  await expect(slip.getByText('Asia/Kolkata')).toHaveCount(3);
+  await page.screenshot({ path: evidence('claim-time-zone') });
 });
 
 test('@claim:csv-export downloads one CSV row per invoice and seals its dates', async ({ page }) => {
@@ -156,7 +169,9 @@ test('@claim:encrypted-backup hides invoice text and restores with its passphras
   await page.getByRole('button', { name: 'Download encrypted' }).click();
   const download = await downloadPromise;
   const payload = await readFile(await download.path(), 'utf8');
+  expect(JSON.parse(payload)).toMatchObject({ algorithm: 'AES-256-GCM', kdf: 'PBKDF2-SHA256-250000' });
   expect(payload).not.toContain('NORTH-026');
+  expect(await page.evaluate(() => Object.values(localStorage).some((value) => value.includes('correct horse battery')))).toBe(false);
   await page.getByLabel('Backup file').setInputFiles(await download.path());
   await page.getByLabel('Passphrase', { exact: false }).last().fill('correct horse battery');
   await page.getByLabel('I understand that records with matching IDs will be replaced.').check();
@@ -165,8 +180,31 @@ test('@claim:encrypted-backup hides invoice text and restores with its passphras
   await page.screenshot({ path: evidence('claim-encrypted-backup') });
 });
 
+test('@claim:plain-backup downloads the complete portable record', async ({ page }) => {
+  await freshDemo(page);
+  await page.getByRole('button', { name: 'Export monthly CSV' }).click();
+  await page.getByLabel('Issue month').fill('2026-08');
+  const csvPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Seal & export CSV' }).click();
+  await csvPromise;
+  await page.getByRole('button', { name: 'Close export dialog' }).click();
+  await openBackup(page);
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download plain JSON' }).click();
+  const payload = JSON.parse(await readFile(await (await downloadPromise).path(), 'utf8'));
+  expect(payload.format).toBe('send-date-ledger');
+  expect(payload.invoices).toHaveLength(3);
+  expect(payload.invoices.map((invoice: { reference: string }) => invoice.reference)).toContain('NORTH-026');
+  expect(payload.exports).toHaveLength(1);
+  expect(payload.exports[0].csv).toContain('NORTH-026');
+  await page.screenshot({ path: evidence('claim-plain-backup') });
+});
+
 test('@claim:paid-pdf stores a PDF only after a cached valid license', async ({ page }) => {
   await freshDemo(page);
+  await page.getByRole('button', { name: 'Add invoice', exact: true }).click();
+  await expect(page.getByLabel('Original invoice PDF')).toBeDisabled();
+  await page.getByRole('button', { name: 'Cancel' }).click();
   await page.evaluate(() => {
     localStorage.setItem('demo:sb_license:invoice-send-ledger', 'verified-test-token');
     localStorage.setItem('demo:sb_license_verdict:invoice-send-ledger', JSON.stringify({ valid: true, reason: 'ok', checkedAt: Date.now() }));
@@ -177,12 +215,61 @@ test('@claim:paid-pdf stores a PDF only after a cached valid license', async ({ 
   await page.getByLabel('Invoice reference').fill('PDF-PAID-1');
   await page.locator('#client').fill('Paper Trail Studio');
   await page.getByLabel('Amount').fill('120');
+  await page.getByLabel('Original invoice PDF').setInputFiles({ name: 'too-large.pdf', mimeType: 'application/pdf', buffer: Buffer.alloc(10 * 1024 * 1024 + 1) });
+  await page.getByRole('button', { name: 'Save invoice' }).click();
+  await expect(page.getByRole('alert')).toContainText('smaller than 10 MB');
   await page.getByLabel('Original invoice PDF').setInputFiles({ name: 'paid-proof.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4 test') });
   await page.getByRole('button', { name: 'Save invoice' }).click();
   await expect(page.getByRole('heading', { name: 'PDF-PAID-1' })).toBeVisible();
   await page.reload();
   await expect(page.getByRole('button', { name: 'Open paid-proof.pdf' })).toBeVisible();
+  await openBackup(page);
+  const backupPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download plain JSON' }).click();
+  const backup = JSON.parse(await readFile(await (await backupPromise).path(), 'utf8'));
+  expect(backup.invoices.find((invoice: { reference: string }) => invoice.reference === 'PDF-PAID-1').pdfDataUrl).toMatch(/^data:application\/pdf;base64,/);
+  await page.getByLabel('Passphrase for encrypted backup').fill('pdf backup passphrase');
+  const encryptedPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Download encrypted' }).click();
+  const encrypted = await encryptedPromise;
+  await page.getByRole('button', { name: 'Close backup dialog' }).click();
+  await page.getByRole('button', { name: 'Reset demo' }).click();
+  await openBackup(page);
+  await page.getByLabel('Backup file').setInputFiles(await encrypted.path());
+  await page.getByLabel('Passphrase', { exact: false }).last().fill('pdf backup passphrase');
+  await page.getByLabel('I understand that records with matching IDs will be replaced.').check();
+  await page.getByRole('button', { name: 'Restore selected file' }).click();
+  await expect(page.getByText('PDF locked · verify license')).toBeVisible();
+  await page.evaluate(() => {
+    localStorage.setItem('demo:sb_license:invoice-send-ledger', 'verified-test-token');
+    localStorage.setItem('demo:sb_license_verdict:invoice-send-ledger', JSON.stringify({ valid: true, reason: 'ok', checkedAt: Date.now() }));
+  });
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Open paid-proof.pdf' })).toBeVisible();
   await page.screenshot({ path: evidence('claim-paid-pdf'), fullPage: true });
+});
+
+test('@claim:license-privacy sends only the pasted token to the Sociobot verification endpoint', async ({ page }) => {
+  await freshDemo(page);
+  const external: string[] = [];
+  page.on('request', (request) => {
+    if (new URL(request.url()).origin !== new URL(page.url()).origin) external.push(request.url());
+  });
+  await page.route('https://api.sociobot.in/**', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ valid: true, reason: 'ok' }) }));
+  await page.getByRole('button', { name: 'View PDF storage plan' }).first().click();
+  expect(external).toEqual([]);
+  await page.getByLabel('Paste your license token').fill('test-token-only');
+  await page.getByRole('button', { name: 'Verify' }).click();
+  await expect(page.getByText('PDF storage is active', { exact: true })).toBeVisible();
+  expect(external).toHaveLength(1);
+  const requestUrl = new URL(external[0]);
+  expect(`${requestUrl.origin}${requestUrl.pathname}`).toBe('https://api.sociobot.in/api/v1/products/invoice-send-ledger/verify');
+  expect(requestUrl.searchParams.get('license')).toBe('test-token-only');
+  expect(external[0]).not.toContain('NORTH-026');
+  await page.reload();
+  await expect(page.locator('.invoice-slip')).toHaveCount(3);
+  expect(external).toHaveLength(1);
+  await page.screenshot({ path: evidence('claim-license-privacy') });
 });
 
 test('@claim:pdf-import reads invoice fields locally and keeps them editable', async ({ page }) => {
@@ -224,9 +311,16 @@ test('routes, metadata, accessibility, focus, and 44px targets pass', async ({ p
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://invoice-send-ledger.sociobot.in/demo');
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
   expect(results.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical')).toEqual([]);
-  for (const button of await page.locator('button:visible').all()) {
-    const box = await button.boundingBox();
-    if (box) expect(box.height, await button.innerText()).toBeGreaterThanOrEqual(44);
+  await page.getByRole('button', { name: /Switch to (dark|light) theme/ }).click();
+  const darkResults = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+  expect(darkResults.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical')).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth)).toBe(true);
+  for (const target of await page.locator('button:visible, header a:visible, footer a:visible, .demo-banner a:visible').all()) {
+    const box = await target.boundingBox();
+    if (box) {
+      expect(box.height, await target.innerText()).toBeGreaterThanOrEqual(44);
+      expect(box.width, await target.innerText()).toBeGreaterThanOrEqual(44);
+    }
   }
 });
 

@@ -93,7 +93,7 @@ function renderShell(): void {
             </button>` : `<a class="primary-button button-link hero-demo-link" href="/demo">Try it with sample data</a>`}
             <span class="action-explainer">${DEMO_MODE ? 'Adds only to this sample record' : 'Opens three sample invoices'}</span>
           </div>
-          <div class="secondary-actions"><button class="text-button" id="manual-invoice-button" type="button">Add invoice manually</button><button class="text-button" id="import-pdf-button" type="button">Import invoice PDF</button><input id="import-pdf-input" type="file" accept="application/pdf,.pdf" hidden><button class="text-button" id="backup-button" type="button">Back up or restore</button></div>
+          <div class="secondary-actions">${DEMO_MODE ? '' : '<button class="text-button" id="manual-invoice-button" type="button">Add invoice manually</button>'}<button class="text-button" id="import-pdf-button" type="button">Import invoice PDF</button><input id="import-pdf-input" type="file" accept="application/pdf,.pdf" hidden><button class="text-button" id="backup-button" type="button">Back up or restore</button></div>
           <ul class="plain-facts"><li>No analytics or advertising</li><li>Edit offline after the first visit</li><li>Date record: free · PDF storage: ₹699 once</li></ul>
         </div>
         <figure class="hero-figure">
@@ -139,6 +139,7 @@ function invoiceDialogMarkup(): string {
         </div>
         <div class="form-error" id="invoice-errors" role="alert" tabindex="-1" hidden></div>
         <input type="hidden" id="invoice-id" />
+        <p class="required-note"><span aria-hidden="true">*</span> Required fields</p>
         <div class="form-grid">
           <div class="field"><label for="reference">Invoice reference <span aria-hidden="true">*</span></label><input id="reference" name="reference" maxlength="80" required autocomplete="off" /></div>
           <div class="field"><label for="client">Client <span aria-hidden="true">*</span></label><input id="client" name="client" maxlength="120" required autocomplete="organization" /></div>
@@ -164,7 +165,7 @@ function invoiceDialogMarkup(): string {
         </fieldset>
         <div class="field"><label for="note">Note <span class="optional">Optional</span></label><textarea id="note" name="note" maxlength="500" rows="3" placeholder="e.g. Sent after final scope approval"></textarea></div>
         <div class="pdf-field">
-          <div><label for="pdf">Original invoice PDF <span class="studio-chip">Studio</span></label><p id="pdf-help">Keep the sent file beside its dates, locally on this device. PDF only, up to 10 MB.</p></div>
+          <div><label for="pdf">Original invoice PDF <span class="studio-chip">PDF plan</span></label><p id="pdf-help">Keep the sent file beside its dates in this browser. PDF only, up to 10 MB.</p></div>
           <input id="pdf" name="pdf" type="file" accept="application/pdf,.pdf" aria-describedby="pdf-help" />
           <label class="remove-pdf" id="remove-pdf-label" hidden><input id="remove-pdf" type="checkbox" /> Remove current PDF</label>
           <button class="text-button small" id="pdf-upgrade-button" type="button" hidden>Unlock PDF storage</button>
@@ -203,14 +204,14 @@ function backupDialogMarkup(): string {
 function settingsDialogMarkup(): string {
   return `
     <dialog id="settings-dialog" class="dialog studio-dialog" aria-labelledby="studio-title">
-      <div class="dialog-heading"><div><p class="eyebrow">One-time purchase</p><h2 id="studio-title">PDF storage plan</h2></div><button class="icon-button dialog-close" type="button" data-close="settings-dialog" aria-label="Close PDF storage plan"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+      <div class="dialog-heading"><div><p class="eyebrow">Existing license feature</p><h2 id="studio-title">PDF storage plan</h2></div><button class="icon-button dialog-close" type="button" data-close="settings-dialog" aria-label="Close PDF storage plan"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
       <div class="studio-price"><span>Lifetime, this version</span><strong>₹699</strong></div>
       <p class="dialog-intro">Invoice records, monthly CSV exports, backups, and accessibility features stay free. This plan adds PDF storage in this browser.</p>
       <ul class="feature-list"><li><span aria-hidden="true">✓</span> Attach invoice PDFs up to 10 MB</li><li><span aria-hidden="true">✓</span> PDFs included in plain and encrypted backups</li><li><span aria-hidden="true">✓</span> One-time purchase—no subscription</li></ul>
       <div id="license-status" class="license-status"></div>
-      <p class="checkout-paused" id="buy-link">Purchases are paused while checkout registration is completed. Existing licenses still work.</p>
+      <p class="checkout-paused" id="buy-link">New licenses are not for sale. Existing licenses still work.</p>
       <div class="license-restore"><h3>Have a license?</h3><label for="license-token">Paste your license token</label><div class="input-button"><input id="license-token" autocomplete="off" spellcheck="false" /><button class="quiet-button" id="restore-license" type="button">Verify</button></div><button class="text-button small" id="remove-license" type="button" hidden>Remove license from this device</button></div>
-      <p class="merchant-note">Secure checkout and refunds are handled by Sociobot/Dodo, the merchant of record. A refund revokes the license. <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+      <p class="merchant-note">License sales and refunds are handled by Sociobot/Dodo, the merchant of record. A refund revokes the license. <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
     </dialog>`;
 }
 
@@ -286,7 +287,7 @@ function invoiceMarkup(invoice: InvoiceRecord): string {
       ${eventMarkup('Paid', invoice.paidAt, Boolean(invoice.paidAt))}
     </div>
     ${invoice.note ? `<p class="invoice-note"><span>Note</span>${escapeHtml(invoice.note)}</p>` : ''}
-    <div class="invoice-actions">${nextAction}${invoice.pdf ? `<button class="text-button small" data-action="pdf" data-id="${invoice.id}" type="button">Open ${escapeHtml(invoice.pdfName ?? 'PDF')}</button>` : ''}<span class="action-spacer"></span><button class="text-button small" data-action="edit" data-id="${invoice.id}" type="button">Edit</button><button class="text-button small danger-text" data-action="remove" data-id="${invoice.id}" type="button" ${sealed ? 'disabled title="Sealed records cannot be removed"' : ''}>Remove</button></div>
+    <div class="invoice-actions">${nextAction}${invoice.pdf && licenseState().unlocked ? `<button class="text-button small" data-action="pdf" data-id="${invoice.id}" type="button">Open ${escapeHtml(invoice.pdfName ?? 'PDF')}</button>` : ''}${invoice.pdf && !licenseState().unlocked ? '<span class="muted-copy">PDF locked · verify license</span>' : ''}<span class="action-spacer"></span><button class="text-button small" data-action="edit" data-id="${invoice.id}" type="button">Edit</button><button class="text-button small danger-text" data-action="remove" data-id="${invoice.id}" type="button" ${sealed ? 'disabled title="Sealed records cannot be removed"' : ''}>Remove</button></div>
   </article>`;
 }
 
@@ -341,6 +342,7 @@ function bindGlobalEvents(): void {
 async function resetDemo(): Promise<void> {
   try {
     await resetDemoData(demoInvoices());
+    clearDemoKeys();
     [invoices, exportsHistory] = await Promise.all([getInvoices(), getExports()]);
     search = '';
     filter = 'All';
@@ -354,11 +356,15 @@ async function resetDemo(): Promise<void> {
 async function leaveDemo(event: Event): Promise<void> {
   event.preventDefault();
   try { await resetDemoData([]); } catch { /* The real ledger is isolated even if cleanup is blocked. */ }
+  clearDemoKeys();
+  location.assign('/');
+}
+
+function clearDemoKeys(): void {
   for (let index = localStorage.length - 1; index >= 0; index -= 1) {
     const key = localStorage.key(index);
     if (key?.startsWith('demo:')) localStorage.removeItem(key);
   }
-  location.assign('/');
 }
 
 async function importPdfFromPicker(event: Event): Promise<void> {
@@ -518,7 +524,7 @@ async function saveInvoiceFromForm(event: Event): Promise<void> {
   const pdfInput = document.querySelector<HTMLInputElement>('#pdf');
   const file = pdfInput?.files?.[0];
   if (file) {
-    if (!licenseState().unlocked) return showError('#invoice-errors', 'PDF storage needs an active Studio license.');
+    if (!licenseState().unlocked) return showError('#invoice-errors', 'PDF storage needs a verified license.');
     if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) return showError('#invoice-errors', 'Choose a PDF file.');
     if (file.size > 10 * 1024 * 1024) return showError('#invoice-errors', 'Choose a PDF smaller than 10 MB.');
     candidate.pdf = file;
@@ -711,7 +717,7 @@ async function restoreLicense(): Promise<void> {
     if (status) status.innerHTML = '<span class="clay-spinner small" aria-hidden="true"></span> Checking license…';
     const state = await verifyLicense(true);
     updateLicenseUi(state.unlocked, state.reason);
-    if (state.unlocked) showToast('Studio unlocked on this device.');
+    if (state.unlocked) showToast('PDF storage is active in this browser.');
   } catch (error) {
     if (status) status.textContent = messageOf(error, 'Could not save that license.');
   }
@@ -721,13 +727,13 @@ function removeLicense(): void {
   clearLicense();
   updateLicenseUi(false);
   renderLedger();
-  showToast('Studio license removed from this device.');
+  showToast('PDF storage license removed from this browser.');
 }
 
 function updateLicenseUi(unlocked: boolean, reason?: string): void {
   const status = document.querySelector<HTMLElement>('#license-status');
   if (status) status.innerHTML = unlocked
-    ? '<span class="license-good" aria-hidden="true">✓</span><div><strong>Studio is active</strong><span>PDF storage is unlocked on this device.</span></div>'
+    ? '<span class="license-good" aria-hidden="true">✓</span><div><strong>PDF storage is active</strong><span>PDF attachments can be stored in this browser.</span></div>'
     : reason && reason !== 'ok'
       ? `<span class="license-warning" aria-hidden="true">!</span><div><strong>License no longer active</strong><span>${escapeHtml(reason.replaceAll('_', ' '))}. You can restore another license below.</span></div>`
       : '<div><strong>Free date record active</strong><span>Invoice dates, monthly CSV exports, and backups are ready.</span></div>';

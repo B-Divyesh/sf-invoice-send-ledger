@@ -1,4 +1,4 @@
-import { DATE_FIELDS, validateChronology } from './domain';
+import { csvForInvoices, DATE_FIELDS, monthOfStamp, validateChronology } from './domain';
 import type { DateField, DateStamp, InvoiceRecord, LedgerExport, PortableBackup, PortableInvoice } from './types';
 
 const CURRENCIES = new Set(['USD', 'EUR', 'GBP', 'INR', 'AUD', 'CAD', 'SGD', 'JPY']);
@@ -10,7 +10,21 @@ function object(value: unknown, label: string): Record<string, unknown> {
 }
 
 function iso(value: unknown, label: string): string {
-  if (typeof value !== 'string' || !value || !Number.isFinite(Date.parse(value))) throw new Error(`${label} has an invalid date.`);
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(value) || !Number.isFinite(Date.parse(value))) {
+    throw new Error(`${label} has an invalid date.`);
+  }
+  const normalized = value.includes('.') ? value : value.replace(/Z$/, '.000Z');
+  if (new Date(value).toISOString() !== normalized) throw new Error(`${label} has an invalid date.`);
+  return value;
+}
+
+function calendarDate(value: unknown, label: string): string {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) throw new Error(`${label} has an invalid date.`);
+  const [year, month, day] = value.split('-').map(Number);
+  const parsed = new Date(Date.UTC(year, month - 1, day));
+  if (parsed.getUTCFullYear() !== year || parsed.getUTCMonth() !== month - 1 || parsed.getUTCDate() !== day) {
+    throw new Error(`${label} has an invalid date.`);
+  }
   return value;
 }
 
@@ -43,14 +57,14 @@ function validateInvoice(value: unknown, label: string): PortableInvoice {
   let dueOn;
   if (item.dueOn !== undefined) {
     const due = object(item.dueOn, `${label} due date`);
-    if (typeof due.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(due.date) || !Number.isFinite(Date.parse(`${due.date}T00:00:00Z`))) throw new Error(`${label} has an invalid due date.`);
-    dueOn = { date: due.date, timeZone: timeZone(due.timeZone, `${label} due date`) };
+    dueOn = { date: calendarDate(due.date, `${label} due date`), timeZone: timeZone(due.timeZone, `${label} due date`) };
   }
   if ((issuedAt && !dueOn) || (!issuedAt && dueOn)) throw new Error(`${label} has an incomplete issued and due-date pair.`);
   if (typeof item.createdAt !== 'string' || typeof item.updatedAt !== 'string') throw new Error(`${label} has invalid timestamps.`);
   iso(item.createdAt, `${label} created date`); iso(item.updatedAt, `${label} updated date`);
   if (item.pdfDataUrl !== undefined && (typeof item.pdfDataUrl !== 'string' || !item.pdfDataUrl.startsWith('data:application/pdf;base64,') || item.pdfDataUrl.length > 14_000_000)) throw new Error(`${label} has an invalid PDF attachment.`);
   if (item.pdfName !== undefined && (typeof item.pdfName !== 'string' || item.pdfName.length > 180)) throw new Error(`${label} has an invalid PDF name.`);
+  if ((item.pdfDataUrl === undefined) !== (item.pdfName === undefined)) throw new Error(`${label} has an incomplete PDF attachment.`);
   const record: PortableInvoice = {
     id: item.id, reference: item.reference.trim(), client: item.client.trim(), amountMinor: item.amountMinor,
     currency: item.currency, termsDays: item.termsDays, draftedAt, issuedAt, sentAt, dueOn, paidAt,
@@ -68,13 +82,16 @@ function validateExport(value: unknown, label: string): LedgerExport {
   if (typeof item.id !== 'string' || !/^[a-zA-Z0-9-]{1,100}$/.test(item.id)) throw new Error(`${label} has an invalid ID.`);
   if (typeof item.month !== 'string' || !/^\d{4}-(0[1-9]|1[0-2])$/.test(item.month)) throw new Error(`${label} has an invalid month.`);
   iso(item.createdAt, `${label} created date`);
-  if (typeof item.csv !== 'string' || !item.csv.startsWith('Reference,Client,')) throw new Error(`${label} has invalid CSV content.`);
+  if (typeof item.csv !== 'string') throw new Error(`${label} has invalid CSV content.`);
   if (!Array.isArray(item.invoices)) throw new Error(`${label} has no invoice list.`);
   const invoices = item.invoices.map((invoice, index) => {
     const portable = validateInvoice(invoice, `${label}, invoice ${index + 1}`);
     const { pdfDataUrl: _data, ...plain } = portable;
     return plain;
   });
+  if (new Set(invoices.map((invoice) => invoice.id)).size !== invoices.length) throw new Error(`${label} contains a duplicate invoice.`);
+  if (invoices.some((invoice) => !invoice.issuedAt || monthOfStamp(invoice.issuedAt) !== item.month)) throw new Error(`${label} contains an invoice outside its issue month.`);
+  if (csvForInvoices(invoices) !== item.csv) throw new Error(`${label} CSV does not match its invoice list.`);
   return { id: item.id, month: item.month, createdAt: item.createdAt as string, csv: item.csv, invoices };
 }
 

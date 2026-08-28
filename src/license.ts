@@ -80,5 +80,3 @@ export function clearLicense(): void {
   localStorage.removeItem(VERDICT_KEY);
   localStorage.removeItem(ATTEMPT_KEY);
 }
-
-export const checkoutUrl = `${API_BASE}/products/${PRODUCT_SLUG}/checkout`;

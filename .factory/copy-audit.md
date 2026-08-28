@@ -27,6 +27,9 @@ Audited 28 August 2026. Counts treat hyphenated terms and prices as one word. No
 | Footer | Record dates for invoices you create elsewhere. | 7 | Pass |
 | Demo banner | Demo — sample data, nothing is saved | 7 | Pass; claim `demo-isolation` |
 | Demo banner | Changes stay separate from your invoice records. | 7 | Pass; claim `demo-isolation` |
+| Plan notice | New licenses are not for sale. | 6 | Pass; no dead purchase action |
+| Plan notice | Existing licenses still work. | 4 | Pass; claims `license-privacy`, `paid-pdf` |
+| Required-field note | Required fields | 2 | Pass; explains the visible asterisk |
 
 ## Terminology
 
