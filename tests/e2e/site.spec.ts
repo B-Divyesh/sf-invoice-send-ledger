@@ -21,6 +21,23 @@ test('root and demo have route titles, metadata, focus, and working back navigat
   expect(errors).toEqual([]);
 });
 
+test('demo shows a named sample invoice in the first viewport and keeps PDF plan wording consistent', async ({ page }) => {
+  await page.goto('/demo');
+  await expect(page.getByRole('heading', { level: 1, name: 'Sample invoice date record' })).toBeFocused();
+  const sample = page.locator('.invoice-slip').filter({ hasText: 'MOSS-118' });
+  await expect(sample).toBeVisible();
+  const box = await sample.boundingBox();
+  const viewport = page.viewportSize();
+  expect(box).not.toBeNull();
+  expect(viewport).not.toBeNull();
+  expect(box!.y).toBeLessThan(viewport!.height);
+  expect(box!.y + box!.height).toBeGreaterThan(0);
+  await expect(page.getByRole('button', { name: 'View PDF storage plan' }).first()).toBeVisible();
+  await expect(page.getByText('PDF plan', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('Clear boundaries', { exact: true })).toHaveCount(0);
+  await page.screenshot({ path: `.factory/evidence/demo-first-viewport-${test.info().project.name}.png` });
+});
+
 test('every visible internal link returns a successful page', async ({ page, request }) => {
   for (const path of ['/', '/demo', '/privacy/', '/terms/', '/404.html', '/offline.html']) {
     await page.goto(path);

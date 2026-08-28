@@ -1,10 +1,12 @@
-# Copy audit — polish 1
+# Copy audit — polish 2
 
 Audited 28 August 2026. Counts treat hyphenated terms and prices as one word. No sentence exceeds 22 words. No banned marketing term remains.
 
 | Surface | Copy | Words | Result |
 |---|---|---:|---|
 | H1 | Track when each client invoice was sent | 7 | Pass: job is explicit |
+| Demo H1 | Sample invoice date record | 4 | Pass: names the populated sample workspace |
+| Demo introduction | Review three invoices, then add or edit a sample date. | 10 | Pass: explains the next action |
 | First screen | For freelancers who prepare invoices over time and need reliable issued, sent, due, and paid dates. | 15 | Pass: user and change are explicit |
 | Demo action note | Opens three sample invoices | 4 | Pass |
 | Demo action note | Adds only to this sample record | 6 | Pass |
@@ -29,6 +31,8 @@ Audited 28 August 2026. Counts treat hyphenated terms and prices as one word. No
 | Demo banner | Changes stay separate from your invoice records. | 7 | Pass; claim `demo-isolation` |
 | Plan notice | New licenses are not for sale. | 6 | Pass; no dead purchase action |
 | Plan notice | Existing licenses still work. | 4 | Pass; claims `license-privacy`, `paid-pdf` |
+| Limits eyebrow | Limits and privacy | 3 | Pass: names the section |
+| Header action | View PDF storage plan | 5 | Pass: action and feature use the stable term |
 | Required-field note | Required fields | 2 | Pass; explains the visible asterisk |
 
 ## Terminology

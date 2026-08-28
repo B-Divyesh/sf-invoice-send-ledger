@@ -63,6 +63,7 @@ async function start(): Promise<void> {
 }
 
 function renderShell(): void {
+  const mainContent = DEMO_MODE ? demoMainMarkup() : landingMainMarkup();
   app.innerHTML = `
     ${DEMO_MODE ? `<aside class="demo-banner" aria-label="Demo mode"><strong>Demo — sample data, nothing is saved</strong><span>Changes stay separate from your invoice records.</span><button class="text-button" id="reset-demo" type="button">Reset demo</button><a href="/" id="start-real">Start for real</a></aside>` : ''}
     <header class="site-header">
@@ -77,9 +78,31 @@ function renderShell(): void {
         <button class="icon-button" id="theme-button" type="button" aria-label="Switch to dark theme" title="Change theme">
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6 7 7m10 10 1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"/><circle cx="12" cy="12" r="4"/></svg>
         </button>
-        <button class="quiet-button" id="settings-button" type="button" aria-label="View PDF storage plan">PDF plan</button>
+        <button class="quiet-button" id="settings-button" type="button">View PDF storage plan</button>
       </nav>
-    </header>
+    </header>${mainContent}
+    <footer>
+      <p><span class="footer-mark" aria-hidden="true"></span> Record dates for invoices you create elsewhere.</p>
+      <nav aria-label="Footer"><a href="/demo">Demo</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
+      <p class="disclosure">Built by Param Factory · build polish-2 · Ceramic artwork generated for this product with Azure OpenAI.</p>
+    </footer>
+    ${invoiceDialogMarkup()}
+    ${exportDialogMarkup()}
+    ${backupDialogMarkup()}
+    ${settingsDialogMarkup()}
+    <dialog id="confirm-dialog" class="dialog small-dialog" aria-labelledby="confirm-title">
+      <div class="dialog-heading"><div><p class="eyebrow">Please confirm</p><h2 id="confirm-title">Remove invoice?</h2></div></div>
+      <p id="confirm-copy"></p>
+      <div class="dialog-actions"><button class="quiet-button" data-close="confirm-dialog" type="button">Keep invoice</button><button class="danger-button" id="confirm-remove" type="button">Remove invoice</button></div>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+    <div class="update-toast" id="update-toast" role="status" hidden><span>A fresh version is ready.</span><button type="button" id="reload-button">Update now</button></div>
+    <div class="sr-only" id="route-announcer" aria-live="polite"></div>
+  `;
+}
+
+function landingMainMarkup(): string {
+  return `
     <main id="main" tabindex="-1">
       <section class="hero" aria-labelledby="page-title">
         <div class="hero-copy">
@@ -104,28 +127,34 @@ function renderShell(): void {
       <section id="ledger-region" class="ledger-region" aria-labelledby="ledger-title" aria-live="polite">
         <div class="loading-state"><span class="clay-spinner" aria-hidden="true"></span><p>Opening your invoice records…</p></div>
       </section>
-      <section class="explain-section" aria-labelledby="how-title"><p class="eyebrow">Three steps</p><h2 id="how-title">How it works</h2><ol class="steps"><li><strong>Record the invoice</strong><span>Enter the details or read them from a PDF in this browser.</span></li><li><strong>Add each date</strong><span>Choose a due rule, then record when you issue, send, and get paid.</span></li><li><strong>Export the month</strong><span>Download a monthly CSV. Dates in that export become sealed.</span></li></ol></section>
-      <section class="limits-section" aria-labelledby="limits-title"><div><p class="eyebrow">Clear boundaries</p><h2 id="limits-title">What this does not do and where data stays</h2></div><div><p>It does not create invoices, calculate tax, take payments, or replace accounting records.</p><p>Invoice records stay in this browser. The app sends no invoice data to a server.</p></div></section>
-      <section class="price-section" aria-labelledby="price-title"><div><p class="eyebrow">PDF storage plan</p><h2 id="price-title">Keep the sent PDF with its dates</h2><p>Invoice date records, monthly CSV exports, and backups are free.</p></div><div class="price-slip"><strong>₹699 once</strong><span>Adds local PDF storage and includes PDFs in backups.</span><button class="quiet-button" id="price-plan-button" type="button">View PDF storage plan</button></div></section>
+      ${informationSectionsMarkup()}
     </main>
-    <footer>
-      <p><span class="footer-mark" aria-hidden="true"></span> Record dates for invoices you create elsewhere.</p>
-      <nav aria-label="Footer"><a href="/demo">Demo</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
-      <p class="disclosure">Built by Param Factory · build polish-1 · Ceramic artwork generated for this product with Azure OpenAI.</p>
-    </footer>
-    ${invoiceDialogMarkup()}
-    ${exportDialogMarkup()}
-    ${backupDialogMarkup()}
-    ${settingsDialogMarkup()}
-    <dialog id="confirm-dialog" class="dialog small-dialog" aria-labelledby="confirm-title">
-      <div class="dialog-heading"><div><p class="eyebrow">Please confirm</p><h2 id="confirm-title">Remove invoice?</h2></div></div>
-      <p id="confirm-copy"></p>
-      <div class="dialog-actions"><button class="quiet-button" data-close="confirm-dialog" type="button">Keep invoice</button><button class="danger-button" id="confirm-remove" type="button">Remove invoice</button></div>
-    </dialog>
-    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
-    <div class="update-toast" id="update-toast" role="status" hidden><span>A fresh version is ready.</span><button type="button" id="reload-button">Update now</button></div>
-    <div class="sr-only" id="route-announcer" aria-live="polite"></div>
   `;
+}
+
+function demoMainMarkup(): string {
+  return `
+    <main id="main" tabindex="-1">
+      <section class="demo-intro" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow"><span class="online-dot" aria-hidden="true"></span><span id="connection-state">Stored in this browser</span></p>
+          <h1 id="page-title" tabindex="-1">Sample invoice date record</h1>
+          <p>Review three invoices, then add or edit a sample date.</p>
+        </div>
+        <div class="secondary-actions"><button class="primary-button" id="new-invoice-button" type="button">Add invoice</button><button class="text-button" id="import-pdf-button" type="button">Import invoice PDF</button><input id="import-pdf-input" type="file" accept="application/pdf,.pdf" hidden><button class="text-button" id="backup-button" type="button">Back up or restore</button></div>
+      </section>
+      <section id="ledger-region" class="ledger-region demo-ledger-region" aria-labelledby="ledger-title" aria-live="polite">
+        <div class="loading-state"><span class="clay-spinner" aria-hidden="true"></span><p>Opening your sample invoices…</p></div>
+      </section>
+      ${informationSectionsMarkup()}
+    </main>
+  `;
+}
+
+function informationSectionsMarkup(): string {
+  return `<section class="explain-section" aria-labelledby="how-title"><p class="eyebrow">Three steps</p><h2 id="how-title">How it works</h2><ol class="steps"><li><strong>Record the invoice</strong><span>Enter the details or read them from a PDF in this browser.</span></li><li><strong>Add each date</strong><span>Choose a due rule, then record when you issue, send, and get paid.</span></li><li><strong>Export the month</strong><span>Download a monthly CSV. Dates in that export become sealed.</span></li></ol></section>
+    <section class="limits-section" aria-labelledby="limits-title"><div><p class="eyebrow">Limits and privacy</p><h2 id="limits-title">What this does not do and where data stays</h2></div><div><p>It does not create invoices, calculate tax, take payments, or replace accounting records.</p><p>Invoice records stay in this browser. The app sends no invoice data to a server.</p></div></section>
+    <section class="price-section" aria-labelledby="price-title"><div><p class="eyebrow">PDF storage plan</p><h2 id="price-title">Keep the sent PDF with its dates</h2><p>Invoice date records, monthly CSV exports, and backups are free.</p></div><div class="price-slip"><strong>₹699 once</strong><span>Adds local PDF storage and includes PDFs in backups.</span><button class="quiet-button" id="price-plan-button" type="button">View PDF storage plan</button></div></section>`;
 }
 
 function invoiceDialogMarkup(): string {
@@ -165,7 +194,7 @@ function invoiceDialogMarkup(): string {
         </fieldset>
         <div class="field"><label for="note">Note <span class="optional">Optional</span></label><textarea id="note" name="note" maxlength="500" rows="3" placeholder="e.g. Sent after final scope approval"></textarea></div>
         <div class="pdf-field">
-          <div><label for="pdf">Original invoice PDF <span class="studio-chip">PDF plan</span></label><p id="pdf-help">Keep the sent file beside its dates in this browser. PDF only, up to 10 MB.</p></div>
+          <div><label for="pdf">Original invoice PDF <span class="studio-chip">PDF storage plan</span></label><p id="pdf-help">Keep the sent file beside its dates in this browser. PDF only, up to 10 MB.</p></div>
           <input id="pdf" name="pdf" type="file" accept="application/pdf,.pdf" aria-describedby="pdf-help" />
           <label class="remove-pdf" id="remove-pdf-label" hidden><input id="remove-pdf" type="checkbox" /> Remove current PDF</label>
           <button class="text-button small" id="pdf-upgrade-button" type="button" hidden>Unlock PDF storage</button>
@@ -237,11 +266,12 @@ function renderLedger(): void {
       <div><p class="eyebrow">Invoice date record</p><h2 id="ledger-title">Recorded invoices</h2></div>
       <button class="quiet-button export-button" id="export-button" type="button"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 18v2h14v-2"/></svg>Export monthly CSV</button>
     </div>
-    ${invoices.length ? statsMarkup(sentRate, dueRate, issued.length) : ''}
-    ${invoices.length ? toolbarMarkup() : ''}
+    ${invoices.length && !DEMO_MODE ? statsMarkup(sentRate, dueRate, issued.length) : ''}
+    ${invoices.length && !DEMO_MODE ? toolbarMarkup() : ''}
     <div id="invoice-list" class="invoice-list">
       ${invoices.length === 0 ? emptyStateMarkup() : filtered.length === 0 ? noResultsMarkup() : filtered.map(invoiceMarkup).join('')}
-    </div>`;
+    </div>
+    ${invoices.length && DEMO_MODE ? `<div class="demo-toolbar">${toolbarMarkup()}</div>` : ''}`;
   bindLedgerEvents();
 }
 
