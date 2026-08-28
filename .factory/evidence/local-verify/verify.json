@@ -1,6 +1,6 @@
 {
   "url": "http://127.0.0.1:4174/demo",
-  "loadMs": 591,
+  "loadMs": 546,
   "errors": [],
   "a11y": {
     "title": "Demo — Send-Date Ledger",
@@ -9,6 +9,6 @@
     "main": true,
     "imgsMissingAlt": 0,
     "buttonsUnlabeled": 0,
-    "textLength": 2709
+    "textLength": 2688
   }
 }
