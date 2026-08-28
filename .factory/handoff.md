@@ -1,68 +1,43 @@
-# Verification handoff — FAIL
+# Adversarial review 1 handoff — FAIL
 
-- Work order: `invoice-send-ledger-verify-1`
-- Candidate: `fabde45771a44f73832bd4d7d6a65001c1d37e33`
+- Work order: `invoice-send-ledger-review-1`
+- Candidate: `feedeb7c8e29c3c46b01adc387987359a48d5520`
 - Live URL: <https://invoice-send-ledger.sociobot.in>
-- Verified: 2026-08-28 UTC
-- Decision: **FAIL — do not release as accepted**
+- Reviewed: 28 August 2026 UTC
+- Product code changed: no
 
 ## What was done
 
-Independent QA was run from a detached clean checkout. No product code was
-changed. The candidate was installed, audited, type checked, tested, built, and
-exercised locally and live across desktop, 390 px mobile, keyboard, dark mode,
-reduced motion, invalid input, backup/restore, CSV sealing, licensing, privacy,
-offline persistence, and service-worker update paths.
+The live product was opened cold in fresh 390 px and desktop Chromium contexts.
+The landing copy and README were audited sentence by sentence. Demo routes,
+storage isolation, requests, metadata, links, route focus, 404 behavior,
+checkout, accessibility, and all defects from the previous handoff were checked
+again. The complete review is in [`.factory/review-1.md`](review-1.md).
 
-The deployed site is online and all 15 deployed build files byte-match the
-candidate. The free happy path is functional, but release acceptance fails on
-data-integrity and paid-unlock requirements.
+## Verification
 
-## Verification summary
+From detached clean worktree `/tmp/invoice-send-ledger-review1-clean`:
 
-- `npm ci`: pass; 0 vulnerabilities.
-- `npm run check`: pass; 7/7 Vitest and 6/6 Playwright tests, with exact
-  production build.
-- Independent core flow: 39/40 checks passed locally and 39/40 live; the failure
-  is a 40 px compact action below the 44 px contract.
-- Axe serious/critical: 0 in light empty, dark populated, and 390 px dialog
-  states.
-- Valid-flow console/page errors: 0 locally and live.
-- PWA: manifest/installability diagnostics pass; offline reload and offline
-  edits persist; simulated update toast, `skipWaiting`, controller change, and
-  reload pass.
-- Privacy: no third-party requests in the free flow; only the disclosed
-  Sociobot license endpoint exists at runtime.
-- Lighthouse live mobile: performance 100, accessibility 100, best practices
-  100, SEO 100; LCP 1.22 s, CLS 0.024, TBT 89 ms, 73,342 transferred bytes.
-- Bundles: 42.69 KB JS, 20.75 KB CSS, 33.17 KB hero, no fonts—all within budget.
+```text
+npm ci              PASS — 0 vulnerabilities
+npm test            PASS — 7/7
+npm run build       PASS — dist/ produced
+npm run test:e2e    PASS — 6/6
+claims.json          FAIL — missing
+@claim tests         FAIL — none exist
+```
 
-## Blocking defects
+The live root factory verifier passed its basic title/lang/main/alt/console
+checks. Live axe found no serious or critical issue in the empty state. Direct
+live tests reproduced demo/real storage mixing, sealed-date restore corruption,
+invalid-timezone lockout, arbitrary-token Studio unlock, 40 px populated
+controls, checkout 404, missing headers, and short asset caching. The deployed
+JS hash matches the current clean build.
 
-1. **High:** restoring an older pre-export backup overwrites a sealed
-   invoice's dates, clears its locks, and makes exported date fields editable.
-2. **High:** a supported-envelope backup with an invalid timezone is persisted
-   before validation; the error is hidden, later loads throw, and the ledger is
-   stuck at its loading state until site data is manually repaired or cleared.
-3. **High:** the live Studio checkout endpoint returns HTTP 404
-   (`{"error":"enabled factory product","status":404}`).
-4. **High:** if initial verification is unavailable, any pasted token is treated
-   as active and enables paid PDF storage without a cached valid verdict.
-5. **Medium:** a stale second tab can overwrite and erase an issue event with no
-   conflict warning/history.
-6. **Medium:** compact invoice controls use a 40 px minimum height instead of the
-   required 44 px.
-7. **Low:** hashed production assets use `max-age=30, must-revalidate`, not
-   long-lived immutable caching.
-8. **Low:** live responses omit CSP and Permissions-Policy hardening.
+## Known gaps and next steps
 
-Full reproduction steps, passing evidence, response-policy details, build
-identity, and retest requirements are in [`.factory/verification.md`](verification.md).
-
-## Next steps
-
-Fix and add regression coverage for the four high-severity defects first. Then
-address stale-tab conflict handling and target sizing, configure immutable
-caching for hashed assets, add appropriate response policies, redeploy, and run
-the independent verification suite again—including a real checkout/return
-cycle. The repository remains buildable at handoff.
+Review verdict is **FAIL** with 58 findings, 14 blocking. Implement a genuinely
+isolated one-click demo first, add and satisfy the claims registry, then correct
+the eight carried-over integrity/licensing/deployment defects. Complete routing,
+metadata, site structure, copy, and PDF import after the blocking behavior is
+covered by regression tests. Redeploy and rerun the full review from scratch.
