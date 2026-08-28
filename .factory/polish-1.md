@@ -70,9 +70,20 @@ Every review finding is mapped below. Claim screenshots are in `.factory/evidenc
 
 ## Local verification summary
 
-- `npm run check`: 20 unit/contract tests and 48 browser tests pass.
+- `npm run check`: 20 unit/contract tests and 50 browser tests pass.
 - Browser matrix: Chromium desktop plus Pixel 5 / 390 px; no console errors.
 - Axe: zero serious or critical findings on app, demo, privacy, terms, and 404; light and dark app themes checked.
 - Lighthouse mobile on `/demo`: Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1.51 s, CLS 0.019, TBT 28 ms.
 - Initial app JS: 18.15 KB gzip; CSS: 5.94 KB gzip; hero image: 33.17 KB.
 - Clean-clone claim commands and deployed checks are recorded in `.factory/handoff.md`.
+
+## Deployed verification
+
+- Cold `/`, `/demo`, `/?demo=1`, `/privacy/`, `/terms/`, `robots.txt`, `sitemap.xml`, and the manifest return 200.
+- A cold unknown path returns HTTP 404 with “This page does not exist” and a working home link.
+- Root and legal loads produce no console errors. The expected browser network entry occurs only when deliberately opening the HTTP 404.
+- The demo shows three samples, hides a real test record, focuses its h1, uses the demo canonical, and makes zero off-origin requests.
+- The deployed service worker activates at scope `/`; the three demo records remain available after a cold offline reload.
+- Live axe has zero serious or critical findings. The 390 px page has no horizontal overflow and tested controls are at least 44 × 44 px.
+- Live Lighthouse on `/demo`: Performance 99, Accessibility 100, Best Practices 100, SEO 100; LCP 1.13 s, CLS 0.075, TBT 32 ms.
+- Live evidence: `.factory/evidence/live/demo-desktop.png`, `demo-mobile.png`, `404-desktop.png`, `verify.json`, and `lighthouse.json`.

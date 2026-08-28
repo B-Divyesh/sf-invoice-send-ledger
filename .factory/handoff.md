@@ -3,7 +3,7 @@
 - Work order: `invoice-send-ledger-polish-1`
 - Candidate repaired: `feedeb7c8e29c3c46b01adc387987359a48d5520`
 - Review commit: `518c8e3273382158b369c9fa5bb7ced22206ccb2`
-- Repair commits: `4976d5980461259e374908bac2de9cb597a56a24`, `4e9db1899309c09d75db62ff272661b2b984097e`
+- Behavior commits: `4976d5980461259e374908bac2de9cb597a56a24`, `4e9db1899309c09d75db62ff272661b2b984097e`, `576712704f9d715e52b427d5798e4e488d45ae73`
 - Product: <https://invoice-send-ledger.sociobot.in>
 - Demo: <https://invoice-send-ledger.sociobot.in/demo> and <https://invoice-send-ledger.sociobot.in/?demo=1>
 - Completed: 28 August 2026 UTC
@@ -27,7 +27,7 @@ All 58 findings in `.factory/review-1.md` are addressed and mapped individually 
 
 ## Clean-clone verification
 
-Verified at commit `4e9db1899309c09d75db62ff272661b2b984097e` in `/tmp/invoice-send-ledger-polish1-clean-PNQ7Le`:
+Verified at commit `576712704f9d715e52b427d5798e4e488d45ae73` in `/tmp/invoice-send-ledger-polish1-final-V7sm0o`:
 
 ```text
 npm ci                         PASS — 69 packages, 0 vulnerabilities
@@ -76,7 +76,27 @@ Build with `npm run build`; deploy the contents of `dist/`.
 
 ## Deployment and live verification
 
-The static deployment and cold production checks are recorded in the final handoff commit after deployment.
+Deployment ID `7aae3b26-2626-43e4-a9d5-5ba4ad2ca2f0` succeeded on Azure Static Web Apps. A cold production check then verified:
+
+```text
+/                                      200
+/index.html                            200
+/demo and /?demo=1                    200
+/privacy/ and /terms/                 200
+/robots.txt, /sitemap.xml, manifest   200
+/definitely-missing-polish-1          404 with the designed page
+```
+
+- CSP, Permissions-Policy, nosniff, and Referrer-Policy are present on production responses.
+- Hashed JS returns `Cache-Control: public, max-age=31536000, immutable`; HTML and `sw.js` return `no-cache`.
+- A fresh service worker activated at `https://invoice-send-ledger.sociobot.in/`, then reloaded all three demo records offline.
+- The live demo isolated a real test record, showed three samples, set its canonical/title, and focused its h1.
+- Root, demo, privacy, and terms produced zero console errors. The intentional 404 produced only the browser’s expected failed-main-request entry.
+- Live request capture during the complete check found zero off-origin requests.
+- Live axe found zero serious or critical issues.
+- At 390 × 844, there was no horizontal overflow and all tested controls were at least 44 × 44 CSS px.
+- Live Lighthouse: Performance 99, Accessibility 100, Best Practices 100, SEO 100; LCP 1.13 s, CLS 0.075, TBT 32 ms.
+- Evidence: `.factory/evidence/live/`.
 
 ## Known gaps
 
