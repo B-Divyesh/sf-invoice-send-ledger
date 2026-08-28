@@ -23,7 +23,7 @@ All 58 findings in `.factory/review-1.md` are addressed and mapped individually 
 - Root, demo, privacy, terms, offline, and 404 pages have appropriate titles, landmarks, focus behavior, shared navigation, legal links, and the ceramic visual system.
 - Static host configuration supplies a real 404, CSP, Permissions-Policy, safe referrer/MIME headers, and immutable hashed-asset caching.
 - Metadata now includes canonical links, Open Graph, Twitter cards, an original 1200 × 630 preview, and a 180 px touch icon.
-- The service worker precaches app/demo/legal shells and supports offline edits plus an update prompt.
+- The service worker precaches app/demo/legal shells and supports offline edits plus an update prompt. The host explicitly serves `/index.html` so production installation succeeds.
 
 ## Clean-clone verification
 

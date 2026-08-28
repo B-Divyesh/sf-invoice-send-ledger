@@ -24,7 +24,7 @@ Every review finding is mapped below. Claim screenshots are in `.factory/evidenc
 | F-1-13 | `/demo` is a distinct deep link with demo title, canonical, focus, announcement, and isolated data. | `site.spec.ts` root/demo navigation test; `@claim:demo-isolation` |
 | F-1-14 | Repaired all eight carried findings: restore locks, validation, checkout, license verification, concurrency, targets, caching, and headers. | Evidence for F-1-4 through F-1-11 |
 | F-1-15 | Added canonical, Open Graph, Twitter, SVG favicon, 180 px touch icon, and an original 1200 × 630 social image to app and legal routes. | `site.spec.ts`; `identify` dimensions; live head check |
-| F-1-16 | Added `robots.txt`, `sitemap.xml`, and a valid Static Web Apps route/header/cache configuration. | `factory.test.ts`; live 200 checks |
+| F-1-16 | Added `robots.txt`, `sitemap.xml`, and a valid Static Web Apps configuration. An explicit `/index.html` route lets the deployed service worker cache and install the shell. | `factory.test.ts`; live 200 and service-worker checks |
 | F-1-17 | Added live invoice preview, three-step explanation, boundaries/privacy, and the exact PDF-plan price in the required order. | `local-verify/screenshot-desktop.png` and `screenshot-mobile.png` |
 | F-1-18 | Unified app, legal, offline, and 404 shells with skip links, wordmark, nav, theme, footer, attribution, build ID, and h1 focus. | `site.spec.ts` legal/404 axe and focus tests |
 | F-1-19 | Standardized user-facing terms: invoice date record, invoice, monthly CSV export, sealed date, demo, PDF storage plan. | `.factory/copy-audit.md`; repository copy search |

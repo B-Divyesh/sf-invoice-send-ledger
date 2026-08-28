@@ -19,6 +19,7 @@ describe('factory acceptance records', () => {
   it('configures real demo and 404 routes, security headers, and immutable assets', () => {
     const config = JSON.parse(readFileSync('public/staticwebapp.config.json', 'utf8'));
     expect(config.routes).toContainEqual(expect.objectContaining({ route: '/demo', rewrite: '/index.html' }));
+    expect(config.routes).toContainEqual(expect.objectContaining({ route: '/index.html', allowedRoles: ['anonymous'] }));
     expect(config.routes).toContainEqual(expect.objectContaining({ route: '/*', statusCode: 404 }));
     expect(config.responseOverrides['404']).toEqual({ rewrite: '/404.html' });
     expect(config.globalHeaders['Content-Security-Policy']).toContain("frame-ancestors 'none'");
