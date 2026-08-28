@@ -1,140 +1,115 @@
-# Review 2 handoff
+# Perfection loop 2 handoff — PASS
 
-- Work order: `invoice-send-ledger-review-2`
-- Reviewed revision: `a3c8eaa7e25bcc12557da2025eeada7b072752ae`
-- Result: **FAIL** — review only; no product code was modified.
-
-## Review 2 summary
-
-Wrote `.factory/review-2.md` after a fresh, adversarial live review at 390 px
-and desktop. Read every prior review, polish document, and handoff. Checked the
-cold landing, demo storage/reset/isolation, request log, all claims, copy,
-metadata, routing, headers, links, and visual identity.
-
-Fresh-clone verification in `/tmp/invoice-send-ledger-review2-Iqd6Sz`:
-
-```text
-npm ci                           PASS
-npm test                         PASS — 20 tests
-npm run build                    PASS — dist/ produced
-14 claims.json commands, separate PASS
-```
-
-Live checks confirmed isolated demo records, Reset demo, Start for real, zero
-off-origin demo-flow requests, valid legal/deep routes, a designed 404,
-required response headers, and no console errors.
-
-Remaining work:
-
-1. **BLOCKING F-1-2:** Sample cards begin at y=1815 on 390 × 844 and y=1157 on
-   1440 × 1000. `/demo` must show a populated sample ledger without scrolling.
-2. **BLOCKING F-1-19/F-1-34:** Rename header `PDF plan` to
-   `View PDF storage plan`.
-3. **Minor F-2-1:** Replace or remove `Clear boundaries`.
-
-See `.factory/review-2.md` for complete evidence and the full copy/history
-audit. The historical handoff follows.
-
-# Perfection loop 1 handoff (historical)
-
-- Work order: `invoice-send-ledger-polish-1`
-- Candidate repaired: `feedeb7c8e29c3c46b01adc387987359a48d5520`
-- Review commit: `518c8e3273382158b369c9fa5bb7ced22206ccb2`
-- Behavior commits: `4976d5980461259e374908bac2de9cb597a56a24`, `4e9db1899309c09d75db62ff272661b2b984097e`, `576712704f9d715e52b427d5798e4e488d45ae73`
+- Work order: `invoice-send-ledger-polish-2`
+- Base reviewed: `a3c8eaa7e25bcc12557da2025eeada7b072752ae`
+- Review source: `1e613feec1f19b913574921e65b3e4b7f590307f`
+- Repair commit: `4e98b2828dc4410fc47f41c1ad78af94ce4725fd`
 - Product: <https://invoice-send-ledger.sociobot.in>
 - Demo: <https://invoice-send-ledger.sociobot.in/demo> and <https://invoice-send-ledger.sociobot.in/?demo=1>
-- Completed: 28 August 2026 UTC
+- Deployment: `7deb3677-ccae-4c8e-a2a5-113575796dd2` — succeeded 28 August 2026 UTC
 
-## What changed
+## Completed
 
-All 58 findings in `.factory/review-1.md` are addressed and mapped individually in `.factory/polish-1.md`.
+- `/demo` and `?demo=1` still use the isolated `demo:send-date-ledger`
+  namespace, show the persistent demo banner, and reset/exit safely. The demo
+  now leads with the populated invoice workspace instead of placing sample
+  slips below the marketing page. At a cold 390 × 844 live load, MOSS-118
+  begins at y=653.61 and is visible in the first viewport.
+- Standardized every user-facing paid-feature reference to **PDF storage plan**.
+  The header action is now **View PDF storage plan**.
+- Replaced the non-descriptive **Clear boundaries** eyebrow with
+  **Limits and privacy**.
+- Preserved the ceramic/date-slip visual system, existing local-first backup,
+  PDF import, offline, routing, security-header, legal, and claim repairs.
+- Updated the verb-first catalog description, copy audit, repair ledger, and
+  build identifiers to `polish-2`.
 
-- The first screen now names the invoice-recording job, freelancers, the safe sample action, its result, and three concrete facts.
-- Demo mode uses `demo:send-date-ledger`, seeds three realistic invoices, never opens the real database, and has persistent reset and exit controls.
-- Fourteen product claims have exactly one tagged observable browser test each.
-- Restore validates all data before an atomic write and preserves existing sealed dates and exports.
-- Revision checks stop stale tabs from overwriting newer dates.
-- PDF text import runs locally and keeps every extracted field editable.
-- PDF storage remains locked without a successful license verdict. Both backup formats retain licensed PDFs. Files over 10 MB are rejected.
-- The broken purchase action is gone. The interface states that new licenses are not for sale and supports verification for existing licenses.
-- Root, demo, privacy, terms, offline, and 404 pages have appropriate titles, landmarks, focus behavior, shared navigation, legal links, and the ceramic visual system.
-- Static host configuration supplies a real 404, CSP, Permissions-Policy, safe referrer/MIME headers, and immutable hashed-asset caching.
-- Metadata now includes canonical links, Open Graph, Twitter cards, an original 1200 × 630 preview, and a 180 px touch icon.
-- The service worker precaches app/demo/legal shells and supports offline edits plus an update prompt. The host explicitly serves `/index.html` so production installation succeeds.
+The complete ID-by-ID mapping for review-1 and review-2 is in
+`.factory/polish-2.md`. No blocking or minor review finding is deferred.
 
 ## Clean-clone verification
 
-Verified at commit `576712704f9d715e52b427d5798e4e488d45ae73` in `/tmp/invoice-send-ledger-polish1-final-V7sm0o`:
+Performed from `/tmp/invoice-send-ledger-polish2-65UlmB`, freshly cloned at
+`4e98b2828dc4410fc47f41c1ad78af94ce4725fd`:
 
 ```text
-npm ci                         PASS — 69 packages, 0 vulnerabilities
-npm test                       PASS — 20/20 tests across 4 files
+npm ci                         PASS — 69 packages; 0 vulnerabilities
+npm test                       PASS — 20 tests
 npm run build                  PASS — dist/index.html produced
-all 14 claims.json commands    PASS — each run separately on Chromium desktop
-npm run test:e2e               PASS — 50/50 tests, desktop and Pixel 5
+npm run test:e2e               PASS — 52 tests, desktop and mobile
 ```
 
-The browser suite includes real/demo isolation and reset, due rules, time zones, CSV contents, sealed restore, malformed backup rejection, offline reload/edit, request privacy, both backup formats, PDF gating/size/restore, license request/cache behavior, PDF import, concurrent writes, route focus/back navigation, internal-link crawl, 44 px targets, phone overflow, dark/light axe checks, and load-time console errors.
-
-Build budgets:
+Each command registered in `.factory/claims.json` was then run separately from
+that same clean clone and passed:
 
 ```text
-Initial app JS                 60.20 KB raw / 18.15 KB gzip
-Initial CSS                    23.94 KB raw / 5.95 KB gzip
-Hero image                     33.17 KB
-Social image                   82.44 KB
+demo-isolation       due-date              time-zone
+csv-export           sealed-restore        backup-validation
+offline-reload       local-only            encrypted-backup
+plain-backup         paid-pdf              license-privacy
+pdf-import           concurrent-write
 ```
 
-PDF.js is a lazy import used only after choosing a PDF. Its 128.94 KB gzip chunk is not part of the initial load.
+The browser suite covers route titles/metadata/focus/back navigation, real
+404s, link crawl, touch targets, mobile overflow, light/dark axe scans,
+request privacy, demo isolation/reset, offline reload/edit, all backup paths,
+license behavior, local PDF import, and stale-tab protection. The new
+`site.spec.ts` viewport/copy regression runs in both projects and writes:
 
-Local mobile Lighthouse on `/demo` (`.factory/evidence/lighthouse-local.json`):
+- `.factory/evidence/demo-first-viewport-chromium-desktop.png`
+- `.factory/evidence/demo-first-viewport-chromium-mobile.png`
 
-```text
-Performance                    100
-Accessibility                  100
-Best Practices                 100
-SEO                            100
-LCP                            1.51 s
-CLS                            0.019
-Total Blocking Time            28 ms
-```
+## Accessibility and performance
 
-The factory URL verifier reported one h1, `lang=en`, a main landmark, complete alt text/button names, and zero console errors. Playwright axe reported zero serious or critical issues in both color themes and on legal/404 routes.
+- Factory URL verification on the local production preview: PASS — title,
+  `lang=en`, one h1, main landmark, complete image alts, labeled buttons, and
+  zero console errors. Evidence: `.factory/evidence/local-polish-2/verify.json`.
+- Axe CLI on local `/demo`: 0 WCAG 2 A/AA violations.
+- Live axe CLI on `/demo`: 0 WCAG 2 A/AA violations.
+- Live mobile Lighthouse on `/demo`: Performance **100**, Accessibility
+  **100**, Best Practices **100**, SEO **100**; LCP **0.941 s**, CLS **0.019**,
+  TBT **6.5 ms**. Evidence:
+  `.factory/evidence/live-polish-2/lighthouse.json`.
+- Current initial application assets: JS **18.33 KB gzip**, CSS **6.10 KB
+  gzip**. The PDF reader remains lazy-loaded; it is not part of initial load.
 
-## Run it
+## Deployed cold verification
 
-```sh
-npm ci
-npm run dev
-npm run check
-```
-
-Build with `npm run build`; deploy the contents of `dist/`.
-
-## Deployment and live verification
-
-Deployment ID `7aae3b26-2626-43e4-a9d5-5ba4ad2ca2f0` succeeded on Azure Static Web Apps. A cold production check then verified:
+The deployment was opened in a fresh Chromium context and verified directly.
 
 ```text
 /                                      200
-/index.html                            200
 /demo and /?demo=1                    200
 /privacy/ and /terms/                 200
 /robots.txt, /sitemap.xml, manifest   200
-/definitely-missing-polish-1          404 with the designed page
+/definitely-missing-polish-2          404
 ```
 
-- CSP, Permissions-Policy, nosniff, and Referrer-Policy are present on production responses.
-- Hashed JS returns `Cache-Control: public, max-age=31536000, immutable`; HTML and `sw.js` return `no-cache`.
-- A fresh service worker activated at `https://invoice-send-ledger.sociobot.in/`, then reloaded all three demo records offline.
-- The live demo isolated a real test record, showed three samples, set its canonical/title, and focused its h1.
-- Root, demo, privacy, and terms produced zero console errors. The intentional 404 produced only the browser’s expected failed-main-request entry.
-- Live request capture during the complete check found zero off-origin requests.
-- Live axe found zero serious or critical issues.
-- At 390 × 844, there was no horizontal overflow and all tested controls were at least 44 × 44 CSS px.
-- Live Lighthouse: Performance 99, Accessibility 100, Best Practices 100, SEO 100; LCP 1.13 s, CLS 0.075, TBT 32 ms.
-- Evidence: `.factory/evidence/live/`.
+- `/demo` title is `Demo — Send-Date Ledger`; its banner, first-viewport
+  sample record, full header label, and absence of both removed phrases were
+  asserted with zero console/page errors. Evidence:
+  `.factory/evidence/live-polish-2/demo-cold-mobile.png`.
+- The live site has CSP, Permissions-Policy, `X-Content-Type-Options`, and
+  Referrer-Policy response headers. Hashed JS returns
+  `Cache-Control: public, max-age=31536000, immutable`.
+- A cold live service-worker check activated the demo shell, went offline,
+  reloaded, and retained all three sample invoices with the offline status.
+- The factory live verifier report and screenshots are in
+  `.factory/evidence/live-polish-2/`.
+
+## Run and deploy
+
+```sh
+npm ci
+npm run check
+```
+
+Deploy the generated `dist/` directory as a Static Web App. The committed
+`public/staticwebapp.config.json` supplies routes, 404 behavior, security
+headers, and hashed-asset caching.
 
 ## Known gaps
 
-No product defect or deferred review finding remains. New PDF licenses are not offered because the external factory product is not enabled; the repository contract prohibits changing billing infrastructure here. The former dead checkout link was removed, and the product makes no purchase promise.
+No unresolved acceptance finding remains. New PDF licenses are not advertised
+for sale because the external factory billing product is unavailable; the app
+honestly supports existing valid licenses and exposes no dead checkout link.
