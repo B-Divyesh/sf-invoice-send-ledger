@@ -13,6 +13,7 @@ function invoice(overrides: Partial<InvoiceRecord> = {}): InvoiceRecord {
     draftedAt: { instant: '2026-08-01T09:00:00.000Z', timeZone: 'UTC' },
     note: '',
     lockedFields: [],
+    revision: 1,
     createdAt: '2026-08-01T09:00:00.000Z',
     updatedAt: '2026-08-01T09:00:00.000Z',
     ...overrides,

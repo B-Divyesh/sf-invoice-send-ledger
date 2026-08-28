@@ -1,7 +1,9 @@
 const PRODUCT_SLUG = document.documentElement.dataset.product ?? 'invoice-send-ledger';
-const LICENSE_KEY = `sb_license:${PRODUCT_SLUG}`;
-const VERDICT_KEY = `sb_license_verdict:${PRODUCT_SLUG}`;
-const ATTEMPT_KEY = `sb_license_attempt:${PRODUCT_SLUG}`;
+const DEMO_MODE = location.pathname === '/demo' || new URLSearchParams(location.search).get('demo') === '1';
+const prefix = DEMO_MODE ? 'demo:' : '';
+const LICENSE_KEY = `${prefix}sb_license:${PRODUCT_SLUG}`;
+const VERDICT_KEY = `${prefix}sb_license_verdict:${PRODUCT_SLUG}`;
+const ATTEMPT_KEY = `${prefix}sb_license_attempt:${PRODUCT_SLUG}`;
 const API_BASE = 'https://api.sociobot.in/api/v1';
 const DAY = 86_400_000;
 
@@ -40,7 +42,7 @@ export function licenseState(): LicenseState {
   const token = localStorage.getItem(LICENSE_KEY);
   const verdict = readVerdict();
   if (!token) return { token: null, unlocked: false };
-  if (!verdict) return { token, unlocked: true };
+  if (!verdict) return { token, unlocked: false, reason: 'not_verified' };
   return { token, unlocked: verdict.valid, reason: verdict.reason };
 }
 
@@ -60,7 +62,8 @@ export async function verifyLicense(force = false): Promise<LicenseState> {
     localStorage.setItem(VERDICT_KEY, JSON.stringify(verdict));
     return { token, unlocked: result.valid, reason: result.reason };
   } catch {
-    return licenseState();
+    const prior = readVerdict();
+    return prior?.valid ? { token, unlocked: true } : { token, unlocked: false, reason: 'verification_unavailable' };
   }
 }
 

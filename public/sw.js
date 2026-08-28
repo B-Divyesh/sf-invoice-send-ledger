@@ -1,19 +1,23 @@
-const VERSION = 'sdl-shell-v1';
+const VERSION = 'sdl-shell-v2';
 const STATIC_CACHE = `${VERSION}-static`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 const CORE = [
   '/',
   '/index.html',
+  '/demo',
   '/offline.html',
   '/manifest.webmanifest',
   '/icon.svg',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
   '/icons/icon-maskable-512.png',
+  '/icons/apple-touch-icon.png',
   '/assets/ceramic-ledger.webp',
+  '/assets/send-date-ledger-social.jpg',
   '/legal.css',
   '/privacy/',
-  '/terms/'
+  '/terms/',
+  '/404.html'
 ];
 
 self.addEventListener('install', (event) => {

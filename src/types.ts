@@ -26,6 +26,7 @@ export interface InvoiceRecord {
   pdf?: Blob;
   pdfName?: string;
   lockedFields: DateField[];
+  revision: number;
   createdAt: string;
   updatedAt: string;
 }

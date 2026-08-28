@@ -1,9 +1,9 @@
 {
   "name": "Send-Date Ledger",
   "short_name": "Send Ledger",
-  "description": "A private offline chronology for invoice draft, issue, sent, due, and paid dates.",
+  "description": "Record issued, sent, due, and paid dates for client invoices.",
   "id": "/?source=pwa",
-  "start_url": "/?v=1",
+  "start_url": "/?v=2",
   "scope": "/",
   "display": "standalone",
   "background_color": "#F4F7F5",

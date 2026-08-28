@@ -1,81 +1,76 @@
 # Send-Date Ledger
 
-Send-Date Ledger is a private, offline-first issue register for freelancers who
-create invoices elsewhere but need the chronology to stay unambiguous. Record a
-draft, issue, sent, due, and paid date; generate the due date from a visible
-`Net N` rule; then seal and export a monthly CSV.
+Send-Date Ledger helps freelancers record when an existing invoice was issued, sent, due, and paid.
 
 Live product: <https://invoice-send-ledger.sociobot.in>
 
-This is an audit-hygiene utility, not an invoice creator, accounting ledger,
-tax calculator, statutory record, or payment gateway.
+Sample demo: <https://invoice-send-ledger.sociobot.in/demo>
 
-## What v1 includes
+It records invoice dates. It does not create invoices, calculate tax, take payments, or replace accounting records.
 
-- Local IndexedDB storage with no account, analytics, or cloud sync
-- Timezone-tagged draft, issued, sent, due, and paid chronology
-- Net 0/7/14/30/45/60 due-date rules
-- Search, lifecycle filtering, sent-date coverage, and due-rule coverage
-- Monthly CSV snapshots that lock dates already included in an export
-- Plain JSON and AES-256-GCM encrypted backup/restore, including PDF data
-- Installable PWA with a versioned service-worker cache and offline editing
-- Light and dark treatments, keyboard-safe dialogs, reduced motion, and a
-  responsive 390px layout
-- Free core product; ₹699 one-time Studio license adds local PDF attachment
-  storage. Checkout and verification use only the Sociobot billing API.
+## What it does
+
+- Records drafted, issued, sent, due, and paid dates with their time zones.
+- Calculates due dates from same-day, 7, 14, 30, 45, or 60-day terms.
+- Reads invoice reference and amount from a PDF in your browser. You can correct every imported field.
+- Searches invoices and filters them by status.
+- Exports a monthly CSV. Dates included in that export become sealed against later edits.
+- Rejects invalid backups before changing any records. Older backups cannot change sealed dates.
+- Downloads readable JSON or passphrase-encrypted backups.
+- Edits records offline after the first visit.
+- Stops a stale tab from overwriting a newer invoice date.
+
+Invoice date records are free. A ₹699 one-time plan adds PDF storage in this browser. New purchases are paused until checkout registration is complete.
+
+## Try the isolated demo
+
+Open `/demo` or `/?demo=1`. Both load three realistic sample invoices in the separate `demo:send-date-ledger` database.
+
+Select **Reset demo** to restore the original samples. Select **Start for real** to discard demo changes and open the real database.
 
 ## Run locally
 
-Requires a current Node.js release (Node 20+ recommended).
+Use Node.js 20 or newer.
 
 ```sh
-npm install
+npm ci
 npm run dev
 ```
 
-Open the URL printed by Vite. No environment variables or external services are
-needed for the free ledger.
+The free invoice date record starts without environment variables.
 
 ## Test and build
 
 ```sh
-npm test          # Vitest unit tests
-npm run build     # reproducible production build -> dist/
-npm run test:e2e  # Playwright desktop/mobile, axe, and offline checks
-npm run check     # all of the above
+npm test          # unit tests
+npm run build     # production build in dist/
+npm run test:e2e  # browser, mobile, axe, privacy, and offline tests
+npm run check     # all checks above
 ```
 
-Playwright is pinned to 1.58.2 as required by the factory runner. The production
-output is static and has `dist/index.html` at its root.
+Playwright is pinned to 1.58.2. Every product claim and its command is listed in [`.factory/claims.json`](.factory/claims.json).
 
 ## Data and backups
 
-Ledger records, export snapshots, PDFs, and license state stay in the browser.
-Use **Back up or restore** to download a portable JSON file. Encrypted backups
-derive an AES-GCM key from the passphrase in the browser; the passphrase is never
-stored or recoverable. Clearing site data removes the local ledger, so regular
-backups matter.
+Invoice records and PDFs use browser storage. Demo records use a separate database and never open the real one.
 
-## Deployment and billing
+Select **Back up or restore**, then **Download plain JSON** for a readable backup. The encrypted option hides invoice text with a passphrase-derived AES-256-GCM key.
 
-Deploy the contents of `dist/` as a static site with history/folder routing
-enabled for `/privacy/` and `/terms/`. The service worker is root-scoped.
+The app does not store the passphrase. Keep it somewhere safe because it cannot be recovered.
 
-The Studio buy link targets:
+## Deployment and PDF licenses
 
-```text
-https://api.sociobot.in/api/v1/products/invoice-send-ledger/checkout
-```
+Deploy `dist/` as a static site. The included host configuration supplies explicit routes, a 404 response, security headers, and immutable caching for hashed assets.
 
-The factory registers the product and return URL separately. No Dodo or other
-payment-provider credentials live in this repository.
+Valid existing licenses can be pasted into the PDF storage plan. Verification uses the Sociobot billing API and stays locked after a first network failure.
 
-## Visual system and product record
+## Product records
 
-The product-specific glacial minimal ceramics system and generated-artwork
-provenance are in [`.factory/design.md`](.factory/design.md). Build verification
-and known constraints are in [`.factory/handoff.md`](.factory/handoff.md).
+- [Visual system and artwork provenance](.factory/design.md)
+- [Demo behavior](.factory/demo.md)
+- [Repair evidence](.factory/polish-1.md)
+- [Handoff](.factory/handoff.md)
 
 ## License
 
-MIT — see [`LICENSE`](LICENSE).
+MIT — see [LICENSE](LICENSE).

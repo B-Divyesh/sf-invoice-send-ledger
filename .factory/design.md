@@ -90,5 +90,6 @@ screens, no gradient background.”
   (`factory-image` deployment), 2026-08-28.
 - Source PNG and prompt sidecar live in `assets/src/`; optimized WebP lives in
   `public/assets/`. Generated imagery is disclosed in the product footer.
+- The 1200 × 630 social preview is a center crop of that same original source;
+  no new generated content or third-party asset was introduced.
 - Product icons, status marks, and logo are original inline SVG/CSS geometry.
-

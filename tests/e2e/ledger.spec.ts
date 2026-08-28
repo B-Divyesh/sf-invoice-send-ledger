@@ -19,7 +19,7 @@ test.beforeEach(async ({ page }) => {
     });
   });
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Your chronology' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Recorded invoices' })).toBeVisible();
 });
 
 test.afterEach(() => {
@@ -27,9 +27,9 @@ test.afterEach(() => {
 });
 
 test('records, issues, exports, and seals an invoice', async ({ page }) => {
-  await page.getByRole('button', { name: 'Add invoice', exact: true }).click();
+  await page.getByRole('button', { name: 'Add invoice manually' }).click();
   await page.getByLabel('Invoice reference').fill('INV-2026-041');
-  await page.getByLabel('Client').fill('Aurora Works');
+  await page.locator('#client').fill('Aurora Works');
   await page.getByLabel('Amount').fill('840.50');
   await page.getByRole('button', { name: 'Save invoice' }).click();
 
@@ -41,7 +41,7 @@ test('records, issues, exports, and seals an invoice', async ({ page }) => {
   await slip.getByRole('button', { name: 'Record sent' }).click();
   await expect(slip).toContainText('Sent');
 
-  await page.getByRole('button', { name: 'Export month' }).click();
+  await page.getByRole('button', { name: 'Export monthly CSV' }).click();
   const downloadPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Seal & export CSV' }).click();
   const download = await downloadPromise;
@@ -53,15 +53,15 @@ test('records, issues, exports, and seals an invoice', async ({ page }) => {
   await slip.getByRole('button', { name: 'Edit' }).click();
   await expect(page.getByLabel('Drafted')).toBeDisabled();
   await expect(page.getByLabel('Issued')).toBeDisabled();
-  await expect(page.getByLabel('Sent')).toBeDisabled();
-  await expect(page.getByText('Stamped dates are locked')).toBeVisible();
+  await expect(page.locator('#sent-at')).toBeDisabled();
+  await expect(page.getByText('These dates are sealed')).toBeVisible();
 });
 
 test('has no serious accessibility violations and works at phone width', async ({ page }) => {
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
   const serious = results.violations.filter((violation) => violation.impact === 'serious' || violation.impact === 'critical');
   expect(serious).toEqual([]);
-  await page.getByRole('button', { name: 'Add invoice', exact: true }).click();
+  await page.getByRole('button', { name: 'Add invoice manually' }).click();
   await expect(page.getByRole('dialog', { name: 'Add invoice' })).toBeVisible();
   await expect(page.getByLabel('Invoice reference')).toBeFocused();
 });
@@ -75,7 +75,7 @@ test('reloads the installed shell while offline', async ({ page, context }) => {
   await page.reload();
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Know exactly when it left your hands.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Track when each client invoice was sent' })).toBeVisible();
   await expect(page.getByText('Offline · changes still save')).toBeVisible();
   await context.setOffline(false);
 });
