@@ -1,4 +1,41 @@
-# Perfection loop 1 handoff
+# Review 2 handoff
+
+- Work order: `invoice-send-ledger-review-2`
+- Reviewed revision: `a3c8eaa7e25bcc12557da2025eeada7b072752ae`
+- Result: **FAIL** — review only; no product code was modified.
+
+## Review 2 summary
+
+Wrote `.factory/review-2.md` after a fresh, adversarial live review at 390 px
+and desktop. Read every prior review, polish document, and handoff. Checked the
+cold landing, demo storage/reset/isolation, request log, all claims, copy,
+metadata, routing, headers, links, and visual identity.
+
+Fresh-clone verification in `/tmp/invoice-send-ledger-review2-Iqd6Sz`:
+
+```text
+npm ci                           PASS
+npm test                         PASS — 20 tests
+npm run build                    PASS — dist/ produced
+14 claims.json commands, separate PASS
+```
+
+Live checks confirmed isolated demo records, Reset demo, Start for real, zero
+off-origin demo-flow requests, valid legal/deep routes, a designed 404,
+required response headers, and no console errors.
+
+Remaining work:
+
+1. **BLOCKING F-1-2:** Sample cards begin at y=1815 on 390 × 844 and y=1157 on
+   1440 × 1000. `/demo` must show a populated sample ledger without scrolling.
+2. **BLOCKING F-1-19/F-1-34:** Rename header `PDF plan` to
+   `View PDF storage plan`.
+3. **Minor F-2-1:** Replace or remove `Clear boundaries`.
+
+See `.factory/review-2.md` for complete evidence and the full copy/history
+audit. The historical handoff follows.
+
+# Perfection loop 1 handoff (historical)
 
 - Work order: `invoice-send-ledger-polish-1`
 - Candidate repaired: `feedeb7c8e29c3c46b01adc387987359a48d5520`
