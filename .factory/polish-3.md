@@ -75,10 +75,39 @@ artifacts, and cold-live results are recorded in the handoff.
 
 ## Required acceptance checks
 
-- Every command in `.factory/claims.json` is run from a fresh clone after the
-  repair, in addition to `npm ci`, `npm test`, `npm run build`, and
-  `npm run test:e2e`.
-- The deployed site is reopened in a fresh browser context. The cold checks
-  cover `/`, `/demo`, `/?demo=1`, legal pages, headers, unknown-path 404,
-  mobile layout, local-only requests, offline demo reload, and Axe serious and
-  critical findings.
+### Clean-clone result
+
+Fresh clone: `/tmp/invoice-send-ledger-polish-3-IgRSDG`, from repair commit
+`27bcdd5`. All commands passed:
+
+- `npm ci`
+- `npm test` — 20 tests passed
+- `npm run build` — produced `dist/index.html`; initial app JS is 18.31 KB
+  gzip and CSS is 6.10 KB gzip
+- `npm run test:e2e` — 52 Playwright tests passed across desktop and Pixel 5
+- every registered command: `@claim:demo-isolation`, `due-date`, `time-zone`,
+  `csv-export`, `sealed-restore`, `backup-validation`, `offline-reload`,
+  `local-only`, `encrypted-backup`, `plain-backup`, `paid-pdf`,
+  `license-privacy`, `pdf-import`, and `concurrent-write`
+
+### Deployed result
+
+`/opt/fleet/lib/deploy-static.sh invoice-send-ledger /work/repo/dist` deployed
+successfully (Static Web Apps deployment `94049742-8765-41de-bd10-3d1a85e01b8e`).
+A cold production audit then passed:
+
+- `verify-url.sh` output: `live-polish-3/verify.json` — demo title/lang/h1/main,
+  image alt coverage, labeled controls, and no console errors.
+- Fresh-browser demo flow: sample is in the first desktop viewport; a real
+  `LIVE-REAL-001` invoice never appears in `?demo=1`; Start for real restores
+  the real record; offline demo edit persists; no demo request leaves the
+  product origin. Screenshots: `demo-live-desktop.png`, `demo-live-mobile.png`.
+- Mobile 390 px checks have no horizontal overflow. `/`, `/demo`, `/privacy/`,
+  `/terms/`, and a cold unknown route have the expected title, one focused h1,
+  and zero serious/critical Axe violations. The unknown route returns HTTP 404.
+- `/demo` supplies CSP (including `frame-ancestors 'none'`), Permissions-Policy,
+  nosniff, and Referrer-Policy headers. Root, demo, query-demo, legal, offline,
+  robots, sitemap, and manifest routes return 200.
+- Production Lighthouse on `/demo`: Performance 100, Accessibility 100, Best
+  Practices 100, SEO 100; LCP 1.109 s, CLS 0.019, TBT 45 ms. Report:
+  `live-polish-3/lighthouse.json`.
