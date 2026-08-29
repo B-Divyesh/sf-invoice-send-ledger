@@ -1,0 +1,48 @@
+{
+  "origin": "https://invoice-send-ledger.sociobot.in",
+  "checks": {
+    "root": "title, h1, audience, CTA, and removed unverified assertions pass",
+    "demo": "isolated banner, named sample in first viewport, reset, title, focus, and no unverified assertions pass",
+    "axeSeriousCritical": []
+  },
+  "routes": {
+    "privacy": {
+      "status": 200,
+      "title": "Privacy — Send-Date Ledger",
+      "heading": "Privacy"
+    },
+    "terms": {
+      "status": 200,
+      "title": "Terms — Send-Date Ledger",
+      "heading": "Terms"
+    },
+    "offline": {
+      "status": 200,
+      "title": "Offline — Send-Date Ledger",
+      "heading": "Reconnect once to open this page"
+    },
+    "fallback": {
+      "status": 200,
+      "title": "Page not found — Send-Date Ledger",
+      "heading": "This page does not exist"
+    },
+    "unknown": {
+      "status": 404,
+      "heading": "This page does not exist"
+    }
+  },
+  "headers": {
+    "/": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://api.sociobot.in; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests",
+      "permissionsPolicy": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()",
+      "cacheControl": "no-cache"
+    },
+    "/demo": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' https://api.sociobot.in; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests",
+      "permissionsPolicy": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()",
+      "cacheControl": "no-cache"
+    }
+  },
+  "consoleErrorsBefore404": [],
+  "externalRequests": []
+}

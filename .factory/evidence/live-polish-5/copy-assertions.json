@@ -1,0 +1,22 @@
+{
+  "root": {
+    "status": 200,
+    "hasPriceOrFreeOffer": false,
+    "hasPublicAzureProvenance": false
+  },
+  "demo": {
+    "status": 200,
+    "hasPriceOrFreeOffer": false,
+    "hasPublicAzureProvenance": false
+  },
+  "terms": {
+    "status": 200,
+    "hasPriceOrFreeOffer": false,
+    "hasPublicAzureProvenance": false
+  },
+  "privacy": {
+    "status": 200,
+    "hasPriceOrFreeOffer": false,
+    "hasPublicAzureProvenance": false
+  }
+}
