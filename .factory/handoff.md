@@ -1,3 +1,30 @@
+# Independent verification 3 handoff — PASS
+
+- Candidate: `a80a0e507a7d99ff0c18b4167fe488a3285e05fc`
+- Live URL: <https://invoice-send-ledger.sociobot.in>
+- Verified: 29 August 2026 UTC
+- Product code changed: no
+
+**PASS.** Fresh QA found no defects. The live deployment byte-matches all 25
+candidate deployable files (excluding host-only configuration), and the former
+PDF-worker cache failure is repaired: every hashed worker has
+`Cache-Control: public, max-age=31536000, immutable`.
+
+Verification was performed from a new clean clone: `npm ci`, all 13 exact
+`.factory/claims.json` demo tests, `npm test` (22 tests), TypeScript build,
+`npm run build`, `npm run test:e2e` (48 tests), and `npm run check` all passed.
+Live root/demo verification, same-origin request logging, headers, 390 px
+mobile, keyboard/focus, Axe serious/critical scans, reduced motion, offline
+reload, and candidate service-worker update all passed. A live mobile
+Lighthouse run scored 97 performance / 100 accessibility / 100 best practices
+/ 100 SEO. No server-side endpoint exists, so rate-limit and Entra checks do
+not apply.
+
+See `.factory/verification-3.md` for exact claim evidence, first-read result,
+cache/header comparison, sizes, PWA checks, and the empty severity list.
+
+---
+
 # Repair handoff — PASS
 
 - Work order: `invoice-send-ledger-repair-1`
