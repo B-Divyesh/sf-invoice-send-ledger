@@ -9,12 +9,14 @@ test('root and demo have route titles, metadata, focus, and working back navigat
   await expect(page).toHaveTitle('Send-Date Ledger — track invoice send dates');
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(page.locator('h1')).toBeFocused();
+  await expect(page.locator('footer')).toContainText('Built by Param Factory · build polish-4');
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /send-date-ledger-social\.jpg$/);
   expect((await page.request.get('/assets/send-date-ledger-social.jpg')).status()).toBe(200);
   await page.getByRole('link', { name: 'Demo' }).first().click();
   await expect(page).toHaveURL(/\/demo$/);
   await expect(page).toHaveTitle('Demo — Send-Date Ledger');
   await expect(page.locator('h1')).toBeFocused();
+  await expect(page.locator('footer')).toContainText('Built by Param Factory · build polish-4');
   await page.goBack();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.locator('h1')).toBeFocused();
@@ -36,6 +38,9 @@ test('demo shows a named sample invoice in the first viewport and keeps PDF plan
   await expect(page.getByText('PDF plan', { exact: true })).toHaveCount(0);
   await expect(page.getByText('Clear boundaries', { exact: true })).toHaveCount(0);
   await expect(page.getByText('New licenses are not for sale.', { exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: 'View PDF storage plan' }).first().click();
+  await expect(page.getByText(/License sales and refunds are handled by Sociobot\/Dodo/)).toHaveCount(0);
+  await expect(page.getByText(/A refund revokes the license/)).toHaveCount(0);
   await page.screenshot({ path: `.factory/evidence/demo-first-viewport-${test.info().project.name}.png` });
 });
 
@@ -52,10 +57,10 @@ test('every visible internal link returns a successful page', async ({ page, req
 });
 
 for (const route of [
-  { path: '/privacy/', title: 'Privacy — Send-Date Ledger', heading: 'Privacy' },
-  { path: '/terms/', title: 'Terms — Send-Date Ledger', heading: 'Terms' },
-  { path: '/404.html', title: 'Page not found — Send-Date Ledger', heading: 'This page does not exist' },
-  { path: '/offline.html', title: 'Offline — Send-Date Ledger', heading: 'Reconnect once to open this page' },
+  { path: '/privacy/', title: 'Privacy — Send-Date Ledger', heading: 'Privacy', canonical: 'https://invoice-send-ledger.sociobot.in/privacy/' },
+  { path: '/terms/', title: 'Terms — Send-Date Ledger', heading: 'Terms', canonical: 'https://invoice-send-ledger.sociobot.in/terms/' },
+  { path: '/404.html', title: 'Page not found — Send-Date Ledger', heading: 'This page does not exist', canonical: 'https://invoice-send-ledger.sociobot.in/404.html' },
+  { path: '/offline.html', title: 'Offline — Send-Date Ledger', heading: 'Reconnect once to open this page', canonical: 'https://invoice-send-ledger.sociobot.in/offline.html' },
 ]) {
   test(`${route.path} uses the shared accessible shell and route metadata`, async ({ page }) => {
     const errors: string[] = [];
@@ -67,13 +72,14 @@ for (const route of [
     await expect(page.locator('main')).toHaveCount(1);
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.getByRole('heading', { level: 1, name: route.heading })).toBeFocused();
+    await expect(page.locator('footer')).toContainText('Built by Param Factory · build polish-4');
     await expect(page.getByRole('link', { name: 'Demo' }).first()).toHaveAttribute('href', '/demo');
     await expect(page.getByRole('link', { name: 'Privacy', exact: true }).first()).toHaveAttribute('href', '/privacy/');
     await expect(page.getByText('New licenses are not for sale.', { exact: true })).toHaveCount(0);
-    if (route.path === '/privacy/' || route.path === '/terms/') {
-      await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /send-date-ledger-social\.jpg$/);
-      await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
-    }
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', route.canonical);
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', route.canonical);
+    await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /send-date-ledger-social\.jpg$/);
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
     const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
     expect(results.violations.filter((item) => item.impact === 'serious' || item.impact === 'critical')).toEqual([]);
     expect(errors).toEqual([]);
