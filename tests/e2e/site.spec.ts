@@ -35,6 +35,7 @@ test('demo shows a named sample invoice in the first viewport and keeps PDF plan
   await expect(page.getByRole('button', { name: 'View PDF storage plan' }).first()).toBeVisible();
   await expect(page.getByText('PDF plan', { exact: true })).toHaveCount(0);
   await expect(page.getByText('Clear boundaries', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('New licenses are not for sale.', { exact: true })).toHaveCount(0);
   await page.screenshot({ path: `.factory/evidence/demo-first-viewport-${test.info().project.name}.png` });
 });
 
@@ -68,6 +69,7 @@ for (const route of [
     await expect(page.getByRole('heading', { level: 1, name: route.heading })).toBeFocused();
     await expect(page.getByRole('link', { name: 'Demo' }).first()).toHaveAttribute('href', '/demo');
     await expect(page.getByRole('link', { name: 'Privacy', exact: true }).first()).toHaveAttribute('href', '/privacy/');
+    await expect(page.getByText('New licenses are not for sale.', { exact: true })).toHaveCount(0);
     if (route.path === '/privacy/' || route.path === '/terms/') {
       await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /send-date-ledger-social\.jpg$/);
       await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');

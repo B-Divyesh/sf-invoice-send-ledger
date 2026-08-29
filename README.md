@@ -19,7 +19,7 @@ It records invoice dates. It does not create invoices, calculate tax, take payme
 - Edits records offline after the first visit.
 - Stops a stale tab from overwriting a newer invoice date.
 
-Invoice date records are free. A ₹699 one-time plan adds PDF storage in this browser. New licenses are not for sale.
+Invoice date records are free. A ₹699 one-time plan adds PDF storage in this browser.
 
 ## Try the isolated demo
 
@@ -65,7 +65,7 @@ Valid existing licenses can be pasted into the PDF storage plan. Verification se
 
 - [Visual system and artwork provenance](.factory/design.md)
 - [Demo behavior](.factory/demo.md)
-- [Repair evidence](.factory/polish-2.md)
+- [Repair evidence](.factory/polish-3.md)
 - [Handoff](.factory/handoff.md)
 
 ## License

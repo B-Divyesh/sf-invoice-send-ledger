@@ -84,7 +84,7 @@ function renderShell(): void {
     <footer>
       <p><span class="footer-mark" aria-hidden="true"></span> Record dates for invoices you create elsewhere.</p>
       <nav aria-label="Footer"><a href="/demo">Demo</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
-      <p class="disclosure">Built by Param Factory · build polish-2 · Ceramic artwork generated for this product with Azure OpenAI.</p>
+      <p class="disclosure">Built by Param Factory · build polish-3 · Ceramic artwork generated for this product with Azure OpenAI.</p>
     </footer>
     ${invoiceDialogMarkup()}
     ${exportDialogMarkup()}
@@ -238,7 +238,7 @@ function settingsDialogMarkup(): string {
       <p class="dialog-intro">Invoice records, monthly CSV exports, backups, and accessibility features stay free. This plan adds PDF storage in this browser.</p>
       <ul class="feature-list"><li><span aria-hidden="true">✓</span> Attach invoice PDFs up to 10 MB</li><li><span aria-hidden="true">✓</span> PDFs included in plain and encrypted backups</li><li><span aria-hidden="true">✓</span> One-time purchase—no subscription</li></ul>
       <div id="license-status" class="license-status"></div>
-      <p class="checkout-paused" id="buy-link">New licenses are not for sale. Existing licenses still work.</p>
+      <p class="checkout-paused" id="buy-link">Verify a license below to add PDF storage.</p>
       <div class="license-restore"><h3>Have a license?</h3><label for="license-token">Paste your license token</label><div class="input-button"><input id="license-token" autocomplete="off" spellcheck="false" /><button class="quiet-button" id="restore-license" type="button">Verify</button></div><button class="text-button small" id="remove-license" type="button" hidden>Remove license from this device</button></div>
       <p class="merchant-note">License sales and refunds are handled by Sociobot/Dodo, the merchant of record. A refund revokes the license. <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
     </dialog>`;

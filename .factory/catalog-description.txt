@@ -1,1 +1,1 @@
-Record issued, sent, due, and paid dates for client invoices in a private offline record.
+Record sent, issued, due, and paid dates for client invoices in a private offline record.
