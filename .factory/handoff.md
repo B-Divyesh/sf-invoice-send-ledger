@@ -1,21 +1,28 @@
-# Review 6 handoff — FAIL
+# Polish 6 handoff — PASS
 
-- Work order: `invoice-send-ledger-review-6`
-- Reviewed commit: `92fbd3288d3d652d6dcbe6f5ebe22391e884cb76`
+- Work order: `invoice-send-ledger-polish-6`
+- Repaired/deployed application commit:
+  `df26cfae405d2b4fc4e0e30a01f3932f6559f09c`
+- Starting candidate: `92fbd3288d3d652d6dcbe6f5ebe22391e884cb76`
+- Deployment: Static deployment `6c084474-0274-4980-9763-4818f73c1aae`
 - Live URL: <https://invoice-send-ledger.sociobot.in>
-- Review: `.factory/review-6.md`
+- Finding record: `.factory/polish-6.md`
 
-## What was done
+## What changed
 
-Performed a read-only adversarial review of the live product and current code.
-Checked cold 390 px and desktop first screens, the one-click demo, live
-real/demo isolation and reset, offline editing, request privacy, copy, all
-routes and links, metadata, history/focus, headers, accessibility, prior
-findings, and missed leverage. No product code was changed.
+Review 6 found the only public licensed feature could not be bought: the
+factory checkout endpoint returned HTTP 404. The repair therefore removed the
+unavailable PDF storage plan, its token verification, checkout language, price
+claims, API dependency, and license UI. PDFs up to 10 MB are now normal local
+invoice attachments, including in both backup formats. This provides the
+brief's PDF path without advertising a fake paid flow.
 
-## Verification
+The repair also corrected the documented and declared Node range to
+`^20.19.0 || >=22.12.0`, updated cache/manifest build identifiers to polish 6,
+renewed every claim/screenshot, and updated the catalog description to:
+“Record client invoice send dates in one local record.”
 
-From fresh clone `/tmp/invoice-send-ledger-review-6-oMLdwM/repo`:
+## Run and verify
 
 ```sh
 npm ci
@@ -24,26 +31,49 @@ npm run build
 npm run test:e2e
 ```
 
-Results: 21 unit/contract tests passed, `dist/` was produced, and all 52
-Playwright tests passed. Every one of the 14 exact commands in
-`.factory/claims.json` also passed separately. Initial JS is 18.11 KB gzip and
-CSS is 6.06 KB gzip. The clean build and live JavaScript bundle have identical
-SHA-256 hashes.
+To run the app locally:
 
-Fresh live browser checks found no console errors, off-origin demo requests,
-serious/critical Axe violations, broken links, mobile overflow, or sub-44 px
-tested controls. The unknown route returns the designed HTTP 404. A live demo
-record remained isolated from a real record; Reset and Start for real worked.
-The demo also reloaded, edited, and retained its edit offline.
+```sh
+npm run dev
+```
 
-## Findings left
+Use Node.js 20.19+ or 22.12+. The production demo is
+<https://invoice-send-ledger.sociobot.in/demo> (or `?demo=1`); it seeds three
+sample invoices in the separate `demo:` storage namespace. The banner offers
+Reset demo and Start for real. `.factory/demo.md` describes this boundary.
 
-- **F-1-17, blocking regression:** the public PDF storage plan requires a
-  license but gives a new visitor no exact price or acquisition path. Add and
-  test a Sociobot purchase flow, or remove the unavailable tier from public
-  product surfaces.
-- **F-6-1, minor:** README says “Node.js 20 or newer,” while Vite 7.3.6 requires
-  `^20.19.0 || >=22.12.0`. Correct the sentence and declare `engines`.
+## Exact verification evidence
 
-See `.factory/review-6.md` for the complete copy audit, claim results, live
-structure evidence, and per-finding history check.
+From clean clone `/tmp/invoice-send-ledger-polish-6-59WkMa/repo` at the
+deployed application commit:
+
+- `npm ci` completed with zero vulnerabilities.
+- `npm test` passed: 21 tests.
+- `npm run build` passed and produced `dist/`; initial application JS is
+  16.62 KB gzip and CSS is 5.81 KB gzip. The deferred local PDF parser is
+  128.94 KB gzip.
+- Each of the 13 exact test commands in `.factory/claims.json` passed
+  separately from a clean state.
+- `npm run test:e2e` passed: 48 Playwright tests.
+- Local `verify-url.sh` passed for `/demo` with title, `lang`, main landmark,
+  image alt, and no console errors in `.factory/evidence/local-polish-6/`.
+
+After deployment, a cold live browser audit checked `/`, `/demo`, `/privacy/`,
+`/terms/`, `/404.html`, `/offline.html`, plus an unknown URL. It found correct
+titles, focused h1s, working internal links, no console errors, no external
+demo requests, no serious/critical Axe findings, no public license/price/tier
+copy, correct CSP/Permissions-Policy/cache headers, and a real HTTP 404.
+It also verified demo/real isolation, reset, start-for-real, and offline save.
+See `.factory/evidence/live-polish-6/live-audit.json`, cold mobile/desktop
+screenshots in that directory, and `lighthouse-mobile.json`.
+
+Mobile Lighthouse score was 100 for Performance, Accessibility, Best
+Practices, and SEO (LCP 1275.795 ms, CLS 0.01896, TBT 34 ms).
+
+## Known gaps / next steps
+
+None for the released product. The absence of a paid PDF tier is deliberate:
+the factory has not provisioned a checkout for this product. If a future work
+order registers that product, it must add a real Sociobot purchase return flow,
+an exact-price claim, and a deterministic purchase verification before making a
+new public offer.

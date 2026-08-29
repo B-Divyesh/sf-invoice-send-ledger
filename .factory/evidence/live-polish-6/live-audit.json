@@ -1,0 +1,213 @@
+{
+  "origin": "https://invoice-send-ledger.sociobot.in",
+  "routes": [
+    {
+      "path": "/",
+      "status": 200,
+      "title": "Send-Date Ledger — track invoice send dates",
+      "h1": "Track when each client invoice was sent",
+      "focusedH1": true,
+      "noTier": true,
+      "axeSeriousCritical": [],
+      "linkStatuses": [
+        [
+          "/",
+          200
+        ],
+        [
+          "/",
+          200
+        ],
+        [
+          "/demo",
+          200
+        ],
+        [
+          "/privacy/",
+          200
+        ],
+        [
+          "/terms/",
+          200
+        ]
+      ]
+    },
+    {
+      "path": "/demo",
+      "status": 200,
+      "title": "Demo — Send-Date Ledger",
+      "h1": "Sample invoice date record",
+      "focusedH1": true,
+      "noTier": true,
+      "axeSeriousCritical": [],
+      "linkStatuses": [
+        [
+          "/demo",
+          200
+        ],
+        [
+          "/",
+          200
+        ],
+        [
+          "/demo",
+          200
+        ],
+        [
+          "/privacy/",
+          200
+        ],
+        [
+          "/terms/",
+          200
+        ]
+      ]
+    },
+    {
+      "path": "/privacy/",
+      "status": 200,
+      "title": "Privacy — Send-Date Ledger",
+      "h1": "Privacy",
+      "focusedH1": true,
+      "noTier": true,
+      "axeSeriousCritical": [],
+      "linkStatuses": [
+        [
+          "/privacy/",
+          200
+        ],
+        [
+          "/",
+          200
+        ],
+        [
+          "/demo",
+          200
+        ],
+        [
+          "/privacy/",
+          200
+        ],
+        [
+          "/terms/",
+          200
+        ]
+      ]
+    },
+    {
+      "path": "/terms/",
+      "status": 200,
+      "title": "Terms — Send-Date Ledger",
+      "h1": "Terms",
+      "focusedH1": true,
+      "noTier": true,
+      "axeSeriousCritical": [],
+      "linkStatuses": [
+        [
+          "/terms/",
+          200
+        ],
+        [
+          "/",
+          200
+        ],
+        [
+          "/demo",
+          200
+        ],
+        [
+          "/privacy/",
+          200
+        ],
+        [
+          "/terms/",
+          200
+        ]
+      ]
+    },
+    {
+      "path": "/404.html",
+      "status": 200,
+      "title": "Page not found — Send-Date Ledger",
+      "h1": "This page does not exist",
+      "focusedH1": true,
+      "noTier": true,
+      "axeSeriousCritical": [],
+      "linkStatuses": [
+        [
+          "/404.html",
+          200
+        ],
+        [
+          "/",
+          200
+        ],
+        [
+          "/demo",
+          200
+        ],
+        [
+          "/privacy/",
+          200
+        ],
+        [
+          "/terms/",
+          200
+        ]
+      ]
+    },
+    {
+      "path": "/offline.html",
+      "status": 200,
+      "title": "Offline — Send-Date Ledger",
+      "h1": "Reconnect once to open this page",
+      "focusedH1": true,
+      "noTier": true,
+      "axeSeriousCritical": [],
+      "linkStatuses": [
+        [
+          "/offline.html",
+          200
+        ],
+        [
+          "/",
+          200
+        ],
+        [
+          "/demo",
+          200
+        ],
+        [
+          "/privacy/",
+          200
+        ],
+        [
+          "/terms/",
+          200
+        ]
+      ]
+    }
+  ],
+  "demo": {
+    "realVisible": true,
+    "demoBanner": true,
+    "realAbsent": true,
+    "sampleCount": 3,
+    "sentRecorded": true,
+    "resetRestored": true,
+    "returnedReal": true,
+    "externalRequests": []
+  },
+  "offline": {
+    "offlineNotice": true,
+    "offlineSaved": true
+  },
+  "headers": {
+    "csp": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests",
+    "permissionsPolicy": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()",
+    "referrerPolicy": "strict-origin-when-cross-origin",
+    "immutableAsset": "public, max-age=31536000, immutable",
+    "missingStatus": 404
+  },
+  "failures": []
+}

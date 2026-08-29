@@ -1,0 +1,15 @@
+HTTP/2 200 
+content-type: text/html
+date: Sat, 29 Aug 2026 05:17:47 GMT
+cache-control: no-cache
+etag: "69720119"
+last-modified: Sat, 29 Aug 2026 05:17:26 GMT
+content-length: 2275
+strict-transport-security: max-age=10886400; includeSubDomains; preload
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-xss-protection: 1; mode=block
+x-dns-prefetch-control: off
+content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+permissions-policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()
+

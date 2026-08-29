@@ -1,0 +1,14 @@
+{
+  "url": "https://invoice-send-ledger.sociobot.in/",
+  "loadMs": 808,
+  "errors": [],
+  "a11y": {
+    "title": "Send-Date Ledger — track invoice send dates",
+    "lang": "en",
+    "h1": 1,
+    "main": true,
+    "imgsMissingAlt": 0,
+    "buttonsUnlabeled": 0,
+    "textLength": 1446
+  }
+}
