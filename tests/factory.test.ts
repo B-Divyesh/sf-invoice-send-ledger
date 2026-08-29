@@ -23,6 +23,8 @@ describe('factory acceptance records', () => {
     expect(config.routes).toContainEqual(expect.objectContaining({ route: '/*', statusCode: 404 }));
     expect(config.responseOverrides['404']).toEqual({ rewrite: '/404.html' });
     expect(config.globalHeaders['Content-Security-Policy']).toContain("frame-ancestors 'none'");
+    expect(config.globalHeaders['Content-Security-Policy']).toContain("connect-src 'self'");
+    expect(config.globalHeaders['Content-Security-Policy']).not.toContain('api.sociobot.in');
     expect(config.globalHeaders['Permissions-Policy']).toContain('camera=()');
     expect(config.routes.find((route: { route: string }) => route.route === '/assets/index-*').headers['Cache-Control']).toContain('immutable');
   });
@@ -33,7 +35,7 @@ describe('factory acceptance records', () => {
     expect(copy).toMatch(/^(Track|Record|Keep|Calculate|Export)\b/);
   });
 
-  it('does not advertise an unverified price, free tier, purchase, or artwork provenance', () => {
+  it('does not expose an unavailable paid tier, checkout, or artwork provenance', () => {
     const visitorCopy = [
       'src/app.ts',
       'README.md',
@@ -42,7 +44,8 @@ describe('factory acceptance records', () => {
       'public/404.html',
       'public/offline.html',
     ].map((path) => readFileSync(path, 'utf8')).join('\n');
-    expect(visitorCopy).not.toMatch(/₹699|one-time purchase|free date record|records are free|Ceramic artwork generated for this product/i);
-    expect(visitorCopy).toContain('PDF storage requires a verified license');
+    expect(visitorCopy).not.toMatch(/₹699|one-time purchase|free date record|records are free|PDF storage plan|verified license|license token|checkout|Ceramic artwork generated for this product/i);
+    expect(visitorCopy).toContain('Attach PDFs up to 10 MB');
+    expect(readFileSync('src/app.ts', 'utf8')).not.toContain('api.sociobot.in');
   });
 });

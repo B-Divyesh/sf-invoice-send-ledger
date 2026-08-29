@@ -18,8 +18,7 @@ It records invoice dates. It does not create invoices, calculate tax, take payme
 - Downloads readable JSON or passphrase-encrypted backups.
 - Edits records offline after the first visit.
 - Stops a stale tab from overwriting a newer invoice date.
-
-PDF storage requires a verified license.
+- Attaches invoice PDFs up to 10 MB in browser storage and both backup formats.
 
 ## Try the isolated demo
 
@@ -29,7 +28,7 @@ Select **Reset demo** to restore the original samples. Select **Start for real**
 
 ## Run locally
 
-Use Node.js 20 or newer.
+Use Node.js 20.19+ or 22.12+.
 
 ```sh
 npm ci
@@ -55,17 +54,15 @@ Select **Back up or restore**, then **Download plain JSON** for a readable backu
 
 The app does not store the passphrase. Keep it somewhere safe because it cannot be recovered.
 
-## Deployment and PDF licenses
+## Deployment
 
 Deploy `dist/` as a static site. The included host configuration supplies explicit routes, a 404 response, security headers, and immutable caching for hashed assets.
-
-Valid existing licenses can be pasted into the PDF storage plan. Verification sends only the token to Sociobot and reuses a successful result for one day.
 
 ## Product records
 
 - [Visual system and artwork provenance](.factory/design.md)
 - [Demo behavior](.factory/demo.md)
-- [Repair evidence](.factory/polish-4.md)
+- [Repair evidence](.factory/polish-6.md)
 - [Handoff](.factory/handoff.md)
 
 ## License

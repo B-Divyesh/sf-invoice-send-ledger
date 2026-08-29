@@ -1,4 +1,4 @@
-const VERSION = 'sdl-shell-v5';
+const VERSION = 'sdl-shell-v6';
 const STATIC_CACHE = `${VERSION}-static`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 const CORE = [

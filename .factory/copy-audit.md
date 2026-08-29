@@ -1,4 +1,4 @@
-# Copy audit — polish 5
+# Copy audit — polish 6
 
 Audited 29 August 2026. Counts treat hyphenated terms as one word. No sentence exceeds 22 words. No banned marketing term remains.
 
@@ -12,7 +12,7 @@ Audited 29 August 2026. Counts treat hyphenated terms as one word. No sentence e
 | Demo action note | Adds only to this sample record | 6 | Pass |
 | Fact | No analytics or advertising | 4 | Pass; claim `local-only` |
 | Fact | Edit offline after the first visit | 6 | Pass; claim `offline-reload` |
-| Fact | PDF storage requires a verified license | 6 | Pass; claim `paid-pdf` |
+| Fact | Attach PDFs up to 10 MB | 6 | Pass; claim `pdf-storage` |
 | Artwork caption | Drafted, issued, due, sent, and paid dates stay together. | 9 | Pass |
 | Empty state | No invoices recorded yet | 4 | Pass |
 | Empty state | Add the next invoice you are drafting, or record one already sent. | 12 | Pass |
@@ -24,18 +24,14 @@ Audited 29 August 2026. Counts treat hyphenated terms as one word. No sentence e
 | Boundaries | It does not create invoices, calculate tax, take payments, or replace accounting records. | 13 | Pass |
 | Privacy | Invoice records stay in this browser. | 6 | Pass; claim `local-only` |
 | Privacy | The app sends no invoice data to a server. | 9 | Pass; claim `local-only` |
-| Plan | PDF storage requires a verified license. | 6 | Pass; claim `paid-pdf` |
-| Plan | Adds local PDF storage and includes PDFs in backups. | 9 | Pass; claim `paid-pdf` |
-| Plan state | Verified license | 2 | Pass; identifies the required state without a price or sale offer |
+| PDF attachment | Attach an invoice PDF in this browser. | 8 | Pass; claim `pdf-storage` |
+| PDF attachment | Included in plain and encrypted backups. | 7 | Pass; claim `pdf-storage` |
 | Footer | Record dates for invoices you create elsewhere. | 7 | Pass |
 | Demo banner | Demo — sample data, nothing is saved | 7 | Pass; claim `demo-isolation` |
 | Demo banner | Changes stay separate from your invoice records. | 7 | Pass; claim `demo-isolation` |
-| Plan notice | Verify a license below to add PDF storage. | 8 | Pass; claims `license-privacy`, `paid-pdf` |
-| PDF plan links | Privacy · Terms | 2 | Pass; replaces the unsupported merchant, refund, and revocation statement |
 | Limits eyebrow | Limits and privacy | 3 | Pass: names the section |
-| Header action | View PDF storage plan | 5 | Pass: action and feature use the stable term |
 | Required-field note | Required fields | 2 | Pass; explains the visible asterisk |
-| Catalog description | Track client invoice send dates in one record. | 9 | Pass: verb-first and under 120 characters |
+| Catalog description | Record client invoice send dates in one local record. | 9 | Pass: verb-first and under 120 characters |
 
 ## Terminology
 
@@ -46,6 +42,6 @@ Audited 29 August 2026. Counts treat hyphenated terms as one word. No sentence e
 | Downloaded month | monthly CSV export |
 | Export-protected date | sealed date |
 | Try-out environment | demo |
-| Licensed attachment feature | PDF storage plan |
+| Invoice attachment | invoice PDF |
 
 “Send-Date Ledger” appears only as the product name. Internal code type names and storage identifiers are not user-facing terminology.

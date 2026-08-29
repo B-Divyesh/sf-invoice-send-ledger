@@ -200,29 +200,21 @@ test('@claim:plain-backup downloads the complete portable record', async ({ page
   await page.screenshot({ path: evidence('claim-plain-backup') });
 });
 
-test('@claim:paid-pdf requires a verified license for PDF storage and includes PDFs in both backup formats', async ({ page }) => {
+test('@claim:pdf-storage keeps an invoice PDF in browser storage and both backup formats', async ({ page }) => {
   await freshDemo(page);
   await page.getByRole('button', { name: 'Add invoice', exact: true }).click();
-  await expect(page.getByLabel('Original invoice PDF')).toBeDisabled();
-  await page.getByRole('button', { name: 'Cancel' }).click();
-  await page.evaluate(() => {
-    localStorage.setItem('demo:sb_license:invoice-send-ledger', 'verified-test-token');
-    localStorage.setItem('demo:sb_license_verdict:invoice-send-ledger', JSON.stringify({ valid: true, reason: 'ok', checkedAt: Date.now() }));
-  });
-  await page.reload();
-  await expect(page.getByText('PDF storage requires a verified license.', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Add invoice', exact: true }).click();
+  await expect(page.getByLabel('Invoice PDF')).toBeEnabled();
   await page.getByLabel('Invoice reference').fill('PDF-PAID-1');
   await page.locator('#client').fill('Paper Trail Studio');
   await page.getByLabel('Amount').fill('120');
-  await page.getByLabel('Original invoice PDF').setInputFiles({ name: 'too-large.pdf', mimeType: 'application/pdf', buffer: Buffer.alloc(10 * 1024 * 1024 + 1) });
+  await page.getByLabel('Invoice PDF').setInputFiles({ name: 'too-large.pdf', mimeType: 'application/pdf', buffer: Buffer.alloc(10 * 1024 * 1024 + 1) });
   await page.getByRole('button', { name: 'Save invoice' }).click();
   await expect(page.getByRole('alert')).toContainText('smaller than 10 MB');
-  await page.getByLabel('Original invoice PDF').setInputFiles({ name: 'paid-proof.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4 test') });
+  await page.getByLabel('Invoice PDF').setInputFiles({ name: 'invoice-proof.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4 test') });
   await page.getByRole('button', { name: 'Save invoice' }).click();
   await expect(page.getByRole('heading', { name: 'PDF-PAID-1' })).toBeVisible();
   await page.reload();
-  await expect(page.getByRole('button', { name: 'Open paid-proof.pdf' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Open invoice-proof.pdf' })).toBeVisible();
   await openBackup(page);
   const backupPromise = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Download plain JSON' }).click();
@@ -239,37 +231,8 @@ test('@claim:paid-pdf requires a verified license for PDF storage and includes P
   await page.getByLabel('Passphrase', { exact: false }).last().fill('pdf backup passphrase');
   await page.getByLabel('I understand that records with matching IDs will be replaced.').check();
   await page.getByRole('button', { name: 'Restore selected file' }).click();
-  await expect(page.getByText('PDF locked · verify license')).toBeVisible();
-  await page.evaluate(() => {
-    localStorage.setItem('demo:sb_license:invoice-send-ledger', 'verified-test-token');
-    localStorage.setItem('demo:sb_license_verdict:invoice-send-ledger', JSON.stringify({ valid: true, reason: 'ok', checkedAt: Date.now() }));
-  });
-  await page.reload();
-  await expect(page.getByRole('button', { name: 'Open paid-proof.pdf' })).toBeVisible();
-  await page.screenshot({ path: evidence('claim-paid-pdf'), fullPage: true });
-});
-
-test('@claim:license-privacy sends only the pasted token to the Sociobot verification endpoint', async ({ page }) => {
-  await freshDemo(page);
-  const external: string[] = [];
-  page.on('request', (request) => {
-    if (new URL(request.url()).origin !== new URL(page.url()).origin) external.push(request.url());
-  });
-  await page.route('https://api.sociobot.in/**', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ valid: true, reason: 'ok' }) }));
-  await page.getByRole('button', { name: 'View PDF storage plan' }).first().click();
-  expect(external).toEqual([]);
-  await page.getByLabel('Paste your license token').fill('test-token-only');
-  await page.getByRole('button', { name: 'Verify' }).click();
-  await expect(page.getByText('PDF storage is active', { exact: true })).toBeVisible();
-  expect(external).toHaveLength(1);
-  const requestUrl = new URL(external[0]);
-  expect(`${requestUrl.origin}${requestUrl.pathname}`).toBe('https://api.sociobot.in/api/v1/products/invoice-send-ledger/verify');
-  expect(requestUrl.searchParams.get('license')).toBe('test-token-only');
-  expect(external[0]).not.toContain('NORTH-026');
-  await page.reload();
-  await expect(page.locator('.invoice-slip')).toHaveCount(3);
-  expect(external).toHaveLength(1);
-  await page.screenshot({ path: evidence('claim-license-privacy') });
+  await expect(page.getByRole('button', { name: 'Open invoice-proof.pdf' })).toBeVisible();
+  await page.screenshot({ path: evidence('claim-pdf-storage'), fullPage: true });
 });
 
 test('@claim:pdf-import reads invoice fields locally and keeps them editable', async ({ page }) => {
@@ -322,16 +285,4 @@ test('routes, metadata, accessibility, focus, and 44px targets pass', async ({ p
       expect(box.width, await target.innerText()).toBeGreaterThanOrEqual(44);
     }
   }
-});
-
-test('a first verification network failure keeps PDF storage locked', async ({ page }) => {
-  await freshDemo(page);
-  await page.getByRole('button', { name: 'View PDF storage plan' }).first().click();
-  await page.getByLabel('Paste your license token').fill('not-a-real-license');
-  await page.route('https://api.sociobot.in/**', (route) => route.abort());
-  await page.getByRole('button', { name: 'Verify' }).click();
-  await expect(page.getByText('License no longer active')).toBeVisible();
-  await page.getByRole('button', { name: 'Close PDF storage plan' }).click();
-  await page.getByRole('button', { name: 'Add invoice', exact: true }).click();
-  await expect(page.getByLabel('Original invoice PDF')).toBeDisabled();
 });

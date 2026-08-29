@@ -16,13 +16,6 @@ import {
   stampFromLocal,
   validateChronology,
 } from './domain';
-import {
-  captureReturnedLicense,
-  clearLicense,
-  licenseState,
-  saveLicense,
-  verifyLicense,
-} from './license';
 import type { DateField, DateStamp, ExportInvoice, InvoiceRecord, LedgerExport, PortableBackup } from './types';
 
 const appRoot = document.querySelector<HTMLDivElement>('#app');
@@ -36,7 +29,6 @@ let filter = 'All';
 let installPrompt: BeforeInstallPromptEvent | null = null;
 let storageError = '';
 
-captureReturnedLicense();
 applySavedTheme();
 renderShell();
 void start();
@@ -53,10 +45,6 @@ async function start(): Promise<void> {
   }
   renderLedger();
   bindGlobalEvents();
-  void verifyLicense().then((state) => {
-    updateLicenseUi(state.unlocked, state.reason);
-    renderLedger();
-  });
   registerServiceWorker();
   updateRouteMetadata();
   window.setTimeout(() => document.querySelector<HTMLElement>('#page-title')?.focus(), 0);
@@ -78,18 +66,16 @@ function renderShell(): void {
         <button class="icon-button" id="theme-button" type="button" aria-label="Switch to dark theme" title="Change theme">
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6 7 7m10 10 1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"/><circle cx="12" cy="12" r="4"/></svg>
         </button>
-        <button class="quiet-button" id="settings-button" type="button">View PDF storage plan</button>
       </nav>
     </header>${mainContent}
     <footer>
       <p><span class="footer-mark" aria-hidden="true"></span> Record dates for invoices you create elsewhere.</p>
       <nav aria-label="Footer"><a href="/demo">Demo</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
-      <p class="disclosure">Built by Param Factory · build polish-5</p>
+      <p class="disclosure">Built by Param Factory · build polish-6</p>
     </footer>
     ${invoiceDialogMarkup()}
     ${exportDialogMarkup()}
     ${backupDialogMarkup()}
-    ${settingsDialogMarkup()}
     <dialog id="confirm-dialog" class="dialog small-dialog" aria-labelledby="confirm-title">
       <div class="dialog-heading"><div><p class="eyebrow">Please confirm</p><h2 id="confirm-title">Remove invoice?</h2></div></div>
       <p id="confirm-copy"></p>
@@ -117,7 +103,7 @@ function landingMainMarkup(): string {
             <span class="action-explainer">${DEMO_MODE ? 'Adds only to this sample record' : 'Opens three sample invoices'}</span>
           </div>
           <div class="secondary-actions">${DEMO_MODE ? '' : '<button class="text-button" id="manual-invoice-button" type="button">Add invoice manually</button>'}<button class="text-button" id="import-pdf-button" type="button">Import invoice PDF</button><input id="import-pdf-input" type="file" accept="application/pdf,.pdf" hidden><button class="text-button" id="backup-button" type="button">Back up or restore</button></div>
-          <ul class="plain-facts"><li>No analytics or advertising</li><li>Edit offline after the first visit</li><li>PDF storage requires a verified license</li></ul>
+          <ul class="plain-facts"><li>No analytics or advertising</li><li>Edit offline after the first visit</li><li>Attach PDFs up to 10 MB</li></ul>
         </div>
         <figure class="hero-figure">
           <img src="/assets/ceramic-ledger.webp" width="1200" height="800" alt="Five handmade porcelain tiles arranged in date order" decoding="async" fetchpriority="high" />
@@ -154,7 +140,7 @@ function demoMainMarkup(): string {
 function informationSectionsMarkup(): string {
   return `<section class="explain-section" aria-labelledby="how-title"><p class="eyebrow">Three steps</p><h2 id="how-title">How it works</h2><ol class="steps"><li><strong>Record the invoice</strong><span>Enter the details or read them from a PDF in this browser.</span></li><li><strong>Add each date</strong><span>Choose a due rule, then record when you issue, send, and get paid.</span></li><li><strong>Export the month</strong><span>Download a monthly CSV. Dates in that export become sealed.</span></li></ol></section>
     <section class="limits-section" aria-labelledby="limits-title"><div><p class="eyebrow">Limits and privacy</p><h2 id="limits-title">What this does not do and where data stays</h2></div><div><p>It does not create invoices, calculate tax, take payments, or replace accounting records.</p><p>Invoice records stay in this browser. The app sends no invoice data to a server.</p></div></section>
-    <section class="price-section" aria-labelledby="price-title"><div><p class="eyebrow">PDF storage plan</p><h2 id="price-title">Keep the sent PDF with its dates</h2><p>PDF storage requires a verified license.</p></div><div class="price-slip"><strong>Verified license</strong><span>Adds local PDF storage and includes PDFs in backups.</span><button class="quiet-button" id="price-plan-button" type="button">View PDF storage plan</button></div></section>`;
+    <section class="attachment-section" aria-labelledby="attachment-title"><div><p class="eyebrow">Invoice PDF</p><h2 id="attachment-title">Keep the original PDF with its dates</h2><p>Attach an invoice PDF in this browser.</p></div><div class="attachment-slip"><strong>Up to 10 MB</strong><span>Included in plain and encrypted backups.</span></div></section>`;
 }
 
 function invoiceDialogMarkup(): string {
@@ -194,10 +180,9 @@ function invoiceDialogMarkup(): string {
         </fieldset>
         <div class="field"><label for="note">Note <span class="optional">Optional</span></label><textarea id="note" name="note" maxlength="500" rows="3" placeholder="e.g. Sent after final scope approval"></textarea></div>
         <div class="pdf-field">
-          <div><label for="pdf">Original invoice PDF <span class="studio-chip">PDF storage plan</span></label><p id="pdf-help">Keep the sent file beside its dates in this browser. PDF only, up to 10 MB.</p></div>
+          <div><label for="pdf">Invoice PDF <span class="optional">Optional</span></label><p id="pdf-help">Keep the original file beside its dates in this browser. PDF only, up to 10 MB.</p></div>
           <input id="pdf" name="pdf" type="file" accept="application/pdf,.pdf" aria-describedby="pdf-help" />
           <label class="remove-pdf" id="remove-pdf-label" hidden><input id="remove-pdf" type="checkbox" /> Remove current PDF</label>
-          <button class="text-button small" id="pdf-upgrade-button" type="button" hidden>Unlock PDF storage</button>
         </div>
         <div class="dialog-actions"><button class="quiet-button" type="button" data-close="invoice-dialog">Cancel</button><button class="primary-button" id="save-invoice" type="submit">Save invoice</button></div>
       </form>
@@ -223,23 +208,10 @@ function backupDialogMarkup(): string {
   return `
     <dialog id="backup-dialog" class="dialog" aria-labelledby="backup-title">
       <div class="dialog-heading"><div><p class="eyebrow">Data ownership</p><h2 id="backup-title">Back up or restore</h2></div><button class="icon-button dialog-close" type="button" data-close="backup-dialog" aria-label="Close backup dialog"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
-      <p class="dialog-intro">Backups include invoice records, monthly CSV history, and stored PDFs. Backup creation happens in this browser.</p>
+      <p class="dialog-intro">Backups include invoice records, monthly CSV history, and attached PDFs. Backup creation happens in this browser.</p>
       <section class="backup-section" aria-labelledby="backup-export-title"><h3 id="backup-export-title">Create a backup</h3><div class="field"><label for="backup-passphrase">Passphrase for encrypted backup</label><input type="password" id="backup-passphrase" minlength="8" autocomplete="new-password" aria-describedby="passphrase-help" /><p id="passphrase-help" class="field-help">Use 8+ characters. It cannot be recovered if forgotten.</p></div><div class="button-row"><button class="primary-button" id="encrypted-backup" type="button">Download encrypted</button><button class="quiet-button" id="plain-backup" type="button">Download plain JSON</button></div></section>
       <section class="backup-section" aria-labelledby="backup-restore-title"><h3 id="backup-restore-title">Restore a backup</h3><div class="field"><label for="restore-file">Backup file</label><input type="file" id="restore-file" accept="application/json,.json,.sdl" /></div><div class="field"><label for="restore-passphrase">Passphrase <span class="optional">For encrypted files</span></label><input type="password" id="restore-passphrase" autocomplete="current-password" /></div><label class="check-label"><input type="checkbox" id="restore-confirm" /> I understand that records with matching IDs will be replaced.</label><button class="quiet-button" id="restore-button" type="button">Restore selected file</button></section>
       <div class="form-error" id="backup-error" role="alert" hidden></div>
-    </dialog>`;
-}
-
-function settingsDialogMarkup(): string {
-  return `
-    <dialog id="settings-dialog" class="dialog studio-dialog" aria-labelledby="studio-title">
-      <div class="dialog-heading"><div><p class="eyebrow">Existing license feature</p><h2 id="studio-title">PDF storage plan</h2></div><button class="icon-button dialog-close" type="button" data-close="settings-dialog" aria-label="Close PDF storage plan"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
-      <p class="dialog-intro">PDF storage requires a verified license. It stores invoice PDFs in this browser.</p>
-      <ul class="feature-list"><li><span aria-hidden="true">✓</span> Attach invoice PDFs up to 10 MB</li><li><span aria-hidden="true">✓</span> PDFs included in plain and encrypted backups</li></ul>
-      <div id="license-status" class="license-status"></div>
-      <p class="checkout-paused" id="buy-link">Verify a license below to add PDF storage.</p>
-      <div class="license-restore"><h3>Have a license?</h3><label for="license-token">Paste your license token</label><div class="input-button"><input id="license-token" autocomplete="off" spellcheck="false" /><button class="quiet-button" id="restore-license" type="button">Verify</button></div><button class="text-button small" id="remove-license" type="button" hidden>Remove license from this device</button></div>
-      <p class="merchant-note"><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
     </dialog>`;
 }
 
@@ -316,7 +288,7 @@ function invoiceMarkup(invoice: InvoiceRecord): string {
       ${eventMarkup('Paid', invoice.paidAt, Boolean(invoice.paidAt))}
     </div>
     ${invoice.note ? `<p class="invoice-note"><span>Note</span>${escapeHtml(invoice.note)}</p>` : ''}
-    <div class="invoice-actions">${nextAction}${invoice.pdf && licenseState().unlocked ? `<button class="text-button small" data-action="pdf" data-id="${invoice.id}" type="button">Open ${escapeHtml(invoice.pdfName ?? 'PDF')}</button>` : ''}${invoice.pdf && !licenseState().unlocked ? '<span class="muted-copy">PDF locked · verify license</span>' : ''}<span class="action-spacer"></span><button class="text-button small" data-action="edit" data-id="${invoice.id}" type="button">Edit</button><button class="text-button small danger-text" data-action="remove" data-id="${invoice.id}" type="button" ${sealed ? 'disabled title="Sealed records cannot be removed"' : ''}>Remove</button></div>
+    <div class="invoice-actions">${nextAction}${invoice.pdf ? `<button class="text-button small" data-action="pdf" data-id="${invoice.id}" type="button">Open ${escapeHtml(invoice.pdfName ?? 'PDF')}</button>` : ''}<span class="action-spacer"></span><button class="text-button small" data-action="edit" data-id="${invoice.id}" type="button">Edit</button><button class="text-button small danger-text" data-action="remove" data-id="${invoice.id}" type="button" ${sealed ? 'disabled title="Sealed records cannot be removed"' : ''}>Remove</button></div>
   </article>`;
 }
 
@@ -334,8 +306,6 @@ function bindGlobalEvents(): void {
   document.querySelector('#import-pdf-button')?.addEventListener('click', () => document.querySelector<HTMLInputElement>('#import-pdf-input')?.click());
   document.querySelector('#import-pdf-input')?.addEventListener('change', importPdfFromPicker);
   document.querySelector('#backup-button')?.addEventListener('click', openBackupDialog);
-  document.querySelector('#settings-button')?.addEventListener('click', openSettingsDialog);
-  document.querySelector('#price-plan-button')?.addEventListener('click', openSettingsDialog);
   document.querySelector('#reset-demo')?.addEventListener('click', resetDemo);
   document.querySelector('#start-real')?.addEventListener('click', leaveDemo);
   document.querySelector('#theme-button')?.addEventListener('click', toggleTheme);
@@ -346,12 +316,6 @@ function bindGlobalEvents(): void {
   document.querySelector('#encrypted-backup')?.addEventListener('click', downloadEncryptedBackup);
   document.querySelector('#plain-backup')?.addEventListener('click', downloadPlainBackup);
   document.querySelector('#restore-button')?.addEventListener('click', restoreBackupFile);
-  document.querySelector('#restore-license')?.addEventListener('click', restoreLicense);
-  document.querySelector('#remove-license')?.addEventListener('click', removeLicense);
-  document.querySelector('#pdf-upgrade-button')?.addEventListener('click', () => {
-    closeDialog('invoice-dialog');
-    openSettingsDialog();
-  });
   document.querySelectorAll<HTMLElement>('[data-close]').forEach((button) => button.addEventListener('click', () => closeDialog(button.dataset.close ?? '')));
   document.querySelectorAll<HTMLDialogElement>('dialog').forEach((dialog) => dialog.addEventListener('click', (event) => {
     if (event.target === dialog) dialog.close();
@@ -371,7 +335,6 @@ function bindGlobalEvents(): void {
 async function resetDemo(): Promise<void> {
   try {
     await resetDemoData(demoInvoices());
-    clearDemoKeys();
     [invoices, exportsHistory] = await Promise.all([getInvoices(), getExports()]);
     search = '';
     filter = 'All';
@@ -385,15 +348,7 @@ async function resetDemo(): Promise<void> {
 async function leaveDemo(event: Event): Promise<void> {
   event.preventDefault();
   try { await resetDemoData([]); } catch { /* The real ledger is isolated even if cleanup is blocked. */ }
-  clearDemoKeys();
   location.assign('/');
-}
-
-function clearDemoKeys(): void {
-  for (let index = localStorage.length - 1; index >= 0; index -= 1) {
-    const key = localStorage.key(index);
-    if (key?.startsWith('demo:')) localStorage.removeItem(key);
-  }
 }
 
 async function importPdfFromPicker(event: Event): Promise<void> {
@@ -408,13 +363,13 @@ async function importPdfFromPicker(event: Event): Promise<void> {
     setValue('#client', fields.client ?? '');
     setValue('#amount', fields.amount ?? '');
     if (fields.currency) setValue('#currency', fields.currency);
-    if (licenseState().unlocked) {
+    if (file.size <= 10 * 1024 * 1024) {
       const transfer = new DataTransfer();
       transfer.items.add(file);
       const pdf = document.querySelector<HTMLInputElement>('#pdf');
       if (pdf) pdf.files = transfer.files;
     }
-    showToast(licenseState().unlocked ? 'PDF details read. Check them before saving.' : 'PDF details read. Check them before saving; the PDF file is not stored.');
+    showToast(file.size <= 10 * 1024 * 1024 ? 'PDF details read and attached. Check them before saving.' : 'PDF details read. The file is larger than 10 MB, so it was not attached.');
     document.querySelector<HTMLInputElement>('#reference')?.focus();
   } catch (error) {
     showToast(messageOf(error, 'Could not read that PDF. Add the invoice manually instead.'));
@@ -500,10 +455,8 @@ function openInvoiceDialog(invoice?: InvoiceRecord): void {
   }
   const terms = document.querySelector<HTMLSelectElement>('#terms');
   if (terms) terms.disabled = Boolean(invoice?.lockedFields.includes('dueOn'));
-  const unlocked = licenseState().unlocked;
   const pdf = document.querySelector<HTMLInputElement>('#pdf');
-  if (pdf) pdf.disabled = !unlocked;
-  toggleHidden('#pdf-upgrade-button', unlocked);
+  if (pdf) pdf.disabled = false;
   toggleHidden('#remove-pdf-label', !Boolean(invoice?.pdf));
   updateDuePreview();
   dialog.showModal();
@@ -553,7 +506,6 @@ async function saveInvoiceFromForm(event: Event): Promise<void> {
   const pdfInput = document.querySelector<HTMLInputElement>('#pdf');
   const file = pdfInput?.files?.[0];
   if (file) {
-    if (!licenseState().unlocked) return showError('#invoice-errors', 'PDF storage needs a verified license.');
     if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) return showError('#invoice-errors', 'Choose a PDF file.');
     if (file.size > 10 * 1024 * 1024) return showError('#invoice-errors', 'Choose a PDF smaller than 10 MB.');
     candidate.pdf = file;
@@ -731,43 +683,6 @@ async function restoreBackupFile(): Promise<void> {
   } catch (error) {
     showError('#backup-error', messageOf(error, 'The backup could not be restored.'));
   }
-}
-
-function openSettingsDialog(): void {
-  const state = licenseState();
-  updateLicenseUi(state.unlocked, state.reason);
-  document.querySelector<HTMLDialogElement>('#settings-dialog')?.showModal();
-}
-
-async function restoreLicense(): Promise<void> {
-  const status = document.querySelector<HTMLElement>('#license-status');
-  try {
-    saveLicense(valueOf('#license-token'));
-    if (status) status.innerHTML = '<span class="clay-spinner small" aria-hidden="true"></span> Checking license…';
-    const state = await verifyLicense(true);
-    updateLicenseUi(state.unlocked, state.reason);
-    if (state.unlocked) showToast('PDF storage is active in this browser.');
-  } catch (error) {
-    if (status) status.textContent = messageOf(error, 'Could not save that license.');
-  }
-}
-
-function removeLicense(): void {
-  clearLicense();
-  updateLicenseUi(false);
-  renderLedger();
-  showToast('PDF storage license removed from this browser.');
-}
-
-function updateLicenseUi(unlocked: boolean, reason?: string): void {
-  const status = document.querySelector<HTMLElement>('#license-status');
-  if (status) status.innerHTML = unlocked
-    ? '<span class="license-good" aria-hidden="true">✓</span><div><strong>PDF storage is active</strong><span>PDF attachments can be stored in this browser.</span></div>'
-    : reason && reason !== 'ok'
-      ? `<span class="license-warning" aria-hidden="true">!</span><div><strong>License no longer active</strong><span>${escapeHtml(reason.replaceAll('_', ' '))}. You can restore another license below.</span></div>`
-      : '<div><strong>PDF storage locked</strong><span>Verify a license below to store invoice PDFs.</span></div>';
-  toggleHidden('#buy-link', unlocked);
-  toggleHidden('#remove-license', !licenseState().token);
 }
 
 function updateDuePreview(): void {

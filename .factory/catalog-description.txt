@@ -1,1 +1,1 @@
-Track client invoice send dates in one record.
+Record client invoice send dates in one local record.
