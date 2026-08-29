@@ -1,0 +1,70 @@
+[
+  {
+    "name": "desktop",
+    "status": 200,
+    "finalUrl": "https://invoice-send-ledger.sociobot.in/",
+    "title": "Send-Date Ledger — track invoice send dates",
+    "h1": [
+      "Track when each client invoice was sent"
+    ],
+    "firstViewportText": "Send-Date Ledger\nDemo\nPrivacy\nStored in this browser\nTrack when each client invoice was sent\nFor freelancers who prepare invoices over time and need reliable issued, sent, due, and paid dates.\nTry it with sample data\nOpens three sample invoices\nAdd invoice manually\nImport invoice PDF\nBack up or restore\nNo analytics or advertising\nEdit offline after the first visit\nAttach PDFs up to 10 MB\nDrafted, issued, due, sent, and paid dates stay together.\nInvoice date record\nRecorded invoices",
+    "tryButtons": 1,
+    "requests": [
+      {
+        "method": "GET",
+        "url": "https://invoice-send-ledger.sociobot.in/",
+        "type": "document"
+      },
+      {
+        "method": "GET",
+        "url": "https://invoice-send-ledger.sociobot.in/assets/index-CKbY8eIK.js",
+        "type": "script"
+      },
+      {
+        "method": "GET",
+        "url": "https://invoice-send-ledger.sociobot.in/assets/index-E92yvaia.css",
+        "type": "stylesheet"
+      },
+      {
+        "method": "GET",
+        "url": "https://invoice-send-ledger.sociobot.in/assets/ceramic-ledger.webp",
+        "type": "image"
+      }
+    ],
+    "errors": []
+  },
+  {
+    "name": "mobile",
+    "status": 200,
+    "finalUrl": "https://invoice-send-ledger.sociobot.in/",
+    "title": "Send-Date Ledger — track invoice send dates",
+    "h1": [
+      "Track when each client invoice was sent"
+    ],
+    "firstViewportText": "Demo\nPrivacy\nStored in this browser\nTrack when each client invoice was sent\nFor freelancers who prepare invoices over time and need reliable issued, sent, due, and paid dates.\nTry it with sample data\nOpens three sample invoices\nAdd invoice manually\nImport invoice PDF\nBack up or restore\nNo analytics or advertising\nEdit offline after the first visit\nAttach PDFs up to 10 MB",
+    "tryButtons": 1,
+    "requests": [
+      {
+        "method": "GET",
+        "url": "https://invoice-send-ledger.sociobot.in/",
+        "type": "document"
+      },
+      {
+        "method": "GET",
+        "url": "https://invoice-send-ledger.sociobot.in/assets/index-CKbY8eIK.js",
+        "type": "script"
+      },
+      {
+        "method": "GET",
+        "url": "https://invoice-send-ledger.sociobot.in/assets/index-E92yvaia.css",
+        "type": "stylesheet"
+      },
+      {
+        "method": "GET",
+        "url": "https://invoice-send-ledger.sociobot.in/assets/ceramic-ledger.webp",
+        "type": "image"
+      }
+    ],
+    "errors": []
+  }
+]

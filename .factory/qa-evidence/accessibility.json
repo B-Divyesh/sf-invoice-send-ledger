@@ -1,0 +1,236 @@
+{
+  "desktop": {
+    "seriousCritical": [],
+    "axeCounts": {
+      "light": 0,
+      "dark": 0,
+      "dialog": 0
+    },
+    "focusedAfterOpen": {
+      "id": "reference",
+      "outline": "rgb(240, 185, 111) solid 3px",
+      "outlineWidth": "3px"
+    },
+    "focusReturned": true,
+    "reverse": [
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "cls": "icon-button",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Privacy",
+        "cls": "",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Demo",
+        "cls": "",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Send-Date Ledger",
+        "cls": "brand",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Start for real",
+        "cls": "",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Reset demo",
+        "cls": "text-button",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Skip to ledger",
+        "cls": "skip-link",
+        "outlineWidth": "3px"
+      }
+    ],
+    "skipFocused": true,
+    "skipOutline": {
+      "outline": "rgb(240, 185, 111) solid 3px",
+      "outlineWidth": "3px"
+    },
+    "mainFocused": true,
+    "durations": {
+      "animation": "1e-05s",
+      "transition": "1e-05s"
+    },
+    "minTarget": {
+      "w": 44,
+      "h": 44
+    },
+    "smallTargets": [],
+    "overflow": {
+      "scrollWidth": 1440,
+      "clientWidth": 1440
+    },
+    "errors": []
+  },
+  "mobile": {
+    "seriousCritical": [],
+    "axeCounts": {
+      "light": 0,
+      "dark": 0,
+      "dialog": 0
+    },
+    "focusedAfterOpen": {
+      "id": "reference",
+      "outline": "rgb(240, 185, 111) solid 3px",
+      "outlineWidth": "3px"
+    },
+    "focusReturned": true,
+    "reverse": [
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "cls": "icon-button",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Privacy",
+        "cls": "",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Demo",
+        "cls": "",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Send-Date Ledger",
+        "cls": "brand",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Start for real",
+        "cls": "",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Reset demo",
+        "cls": "text-button",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Skip to ledger",
+        "cls": "skip-link",
+        "outlineWidth": "3px"
+      }
+    ],
+    "skipFocused": true,
+    "skipOutline": {
+      "outline": "rgb(240, 185, 111) solid 3px",
+      "outlineWidth": "3px"
+    },
+    "mainFocused": true,
+    "durations": {
+      "animation": "1e-05s",
+      "transition": "1e-05s"
+    },
+    "minTarget": {
+      "w": 44,
+      "h": 44
+    },
+    "smallTargets": [],
+    "overflow": {
+      "scrollWidth": 390,
+      "clientWidth": 390
+    },
+    "errors": []
+  },
+  "zoom200": {
+    "seriousCritical": [],
+    "axeCounts": {
+      "light": 0,
+      "dark": 0,
+      "dialog": 0
+    },
+    "focusedAfterOpen": {
+      "id": "reference",
+      "outline": "rgb(240, 185, 111) solid 3px",
+      "outlineWidth": "3px"
+    },
+    "focusReturned": true,
+    "reverse": [
+      {
+        "tag": "BUTTON",
+        "text": "",
+        "cls": "icon-button",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Privacy",
+        "cls": "",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Demo",
+        "cls": "",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Send-Date Ledger",
+        "cls": "brand",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Start for real",
+        "cls": "",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Reset demo",
+        "cls": "text-button",
+        "outlineWidth": "3px"
+      },
+      {
+        "tag": "A",
+        "text": "Skip to ledger",
+        "cls": "skip-link",
+        "outlineWidth": "3px"
+      }
+    ],
+    "skipFocused": true,
+    "skipOutline": {
+      "outline": "rgb(240, 185, 111) solid 3px",
+      "outlineWidth": "3px"
+    },
+    "mainFocused": true,
+    "durations": {
+      "animation": "1e-05s",
+      "transition": "1e-05s"
+    },
+    "minTarget": {
+      "w": 44,
+      "h": 44
+    },
+    "smallTargets": [],
+    "overflow": {
+      "scrollWidth": 640,
+      "clientWidth": 640
+    },
+    "errors": []
+  }
+}

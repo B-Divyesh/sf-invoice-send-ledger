@@ -1,0 +1,12 @@
+{
+  "before": [
+    "sdl-shell-v6-static"
+  ],
+  "toast": "A fresh version is ready.\nUpdate now",
+  "after": [
+    "sdl-shell-v7-qa3-static",
+    "sdl-shell-v7-qa3-runtime"
+  ],
+  "controller": "http://127.0.0.1:46441/sw.js",
+  "errors": []
+}

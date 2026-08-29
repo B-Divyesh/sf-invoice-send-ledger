@@ -1,0 +1,9 @@
+{
+  "interactionDurationsMs": [
+    32,
+    40,
+    24
+  ],
+  "maxInteractionDurationMs": 40,
+  "entryCount": 68
+}

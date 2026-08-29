@@ -1,0 +1,118 @@
+HTTPS_ROOT
+HTTP/2 200 
+content-type: text/html
+date: Sat, 29 Aug 2026 06:37:26 GMT
+cache-control: no-cache
+etag: "73726738"
+last-modified: Sat, 29 Aug 2026 06:18:37 GMT
+content-length: 2275
+strict-transport-security: max-age=10886400; includeSubDomains; preload
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-xss-protection: 1; mode=block
+x-dns-prefetch-control: off
+content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+permissions-policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()
+
+HTTP_ROOT
+HTTP/1.1 301 Moved Permanently
+Content-Length: 0
+Date: Sat, 29 Aug 2026 06:37:26 GMT
+Location: https://invoice-send-ledger.sociobot.in/
+
+DEMO
+HTTP/2 200 
+content-type: text/html
+date: Sat, 29 Aug 2026 06:37:26 GMT
+cache-control: no-cache
+etag: "73726738"
+last-modified: Sat, 29 Aug 2026 06:18:37 GMT
+content-length: 2275
+strict-transport-security: max-age=10886400; includeSubDomains; preload
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-xss-protection: 1; mode=block
+x-dns-prefetch-control: off
+content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+permissions-policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()
+
+PRIVACY
+HTTP/2 200 
+content-type: text/html
+date: Sat, 29 Aug 2026 06:37:26 GMT
+cache-control: public, must-revalidate, max-age=30
+etag: "73726738"
+last-modified: Sat, 29 Aug 2026 06:18:37 GMT
+content-length: 3653
+strict-transport-security: max-age=10886400; includeSubDomains; preload
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-xss-protection: 1; mode=block
+x-dns-prefetch-control: off
+content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+permissions-policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()
+
+TERMS
+HTTP/2 200 
+content-type: text/html
+date: Sat, 29 Aug 2026 06:37:27 GMT
+cache-control: public, must-revalidate, max-age=30
+etag: "73726738"
+last-modified: Sat, 29 Aug 2026 06:18:37 GMT
+content-length: 3598
+strict-transport-security: max-age=10886400; includeSubDomains; preload
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-xss-protection: 1; mode=block
+x-dns-prefetch-control: off
+content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+permissions-policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()
+
+MANIFEST
+HTTP/2 200 
+content-type: application/manifest+json
+date: Sat, 29 Aug 2026 06:37:27 GMT
+cache-control: public, must-revalidate, max-age=30
+etag: "73726738"
+last-modified: Sat, 29 Aug 2026 06:18:37 GMT
+content-length: 644
+strict-transport-security: max-age=10886400; includeSubDomains; preload
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-xss-protection: 1; mode=block
+x-dns-prefetch-control: off
+content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+permissions-policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()
+
+SW
+HTTP/2 200 
+content-type: text/javascript
+date: Sat, 29 Aug 2026 06:37:27 GMT
+cache-control: no-cache
+etag: "73726738"
+last-modified: Sat, 29 Aug 2026 06:18:37 GMT
+content-length: 2481
+strict-transport-security: max-age=10886400; includeSubDomains; preload
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-xss-protection: 1; mode=block
+x-dns-prefetch-control: off
+content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+permissions-policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()
+
+UNKNOWN
+HTTP/2 404 
+content-type: text/html
+date: Sat, 29 Aug 2026 06:37:28 GMT
+cache-control: public, must-revalidate, max-age=30
+etag: "73726738"
+last-modified: Sat, 29 Aug 2026 06:18:37 GMT
+content-length: 2585
+strict-transport-security: max-age=10886400; includeSubDomains; preload
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-xss-protection: 1; mode=block
+x-dns-prefetch-control: off
+content-security-policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+permissions-policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=()
+

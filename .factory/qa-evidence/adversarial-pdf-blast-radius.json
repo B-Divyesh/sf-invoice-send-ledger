@@ -1,0 +1,22 @@
+{
+  "acceptedFile": {
+    "name": "invoice.pdf",
+    "declaredMime": "text/html"
+  },
+  "opened": {
+    "origin": "https://invoice-send-ledger.sociobot.in",
+    "opener": false,
+    "title": "EXECUTED-PDF-MIME",
+    "localStorageResult": {
+      "ok": true,
+      "keys": []
+    },
+    "dbsResult": {
+      "ok": true,
+      "dbs": [
+        "demo:send-date-ledger"
+      ]
+    }
+  },
+  "blockedExfilRequests": []
+}

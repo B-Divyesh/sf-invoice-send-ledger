@@ -1,0 +1,69 @@
+NODE
+v22.23.2
+10.9.8
+NPM_AUDIT
+found 0 vulnerabilities
+UNIT
+
+> invoice-send-ledger@1.0.0 test
+> vitest run
+
+
+ RUN  v3.2.7 /work/repo
+
+ ✓ tests/factory.test.ts (5 tests) 12ms
+ ✓ tests/domain.test.ts (5 tests) 96ms
+ ✓ tests/backup.test.ts (10 tests) 101ms
+ ✓ tests/crypto.test.ts (2 tests) 244ms
+
+ Test Files  4 passed (4)
+      Tests  22 passed (22)
+   Start at  06:34:19
+   Duration  2.77s (transform 706ms, setup 0ms, collect 1.06s, tests 453ms, environment 1ms, prepare 1.43s)
+
+TYPECHECK
+BUILD
+
+> invoice-send-ledger@1.0.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 13 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                              2.28 kB │ gzip:   0.76 kB
+dist/assets/pdf.worker.min-CHFwMXne.mjs  1,262.40 kB
+dist/assets/index-E92yvaia.css              23.24 kB │ gzip:   5.81 kB
+dist/assets/pdf.worker.min-CevBI0zc.js       0.12 kB │ gzip:   0.13 kB │ map:     0.27 kB
+dist/assets/index-CKbY8eIK.js               55.39 kB │ gzip:  16.62 kB │ map:   125.61 kB
+dist/assets/pdf-BRz36HYW.js                433.00 kB │ gzip: 128.94 kB │ map: 1,483.99 kB
+✓ built in 3.57s
+DIST
+404.html 2585 bytes
+assets/ceramic-ledger.webp 33166 bytes
+assets/index-CKbY8eIK.js 55388 bytes
+assets/index-CKbY8eIK.js.map 125614 bytes
+assets/index-E92yvaia.css 23244 bytes
+assets/pdf-BRz36HYW.js 433003 bytes
+assets/pdf-BRz36HYW.js.map 1483994 bytes
+assets/pdf.worker.min-CHFwMXne.mjs 1262398 bytes
+assets/pdf.worker.min-CevBI0zc.js 120 bytes
+assets/pdf.worker.min-CevBI0zc.js.map 269 bytes
+assets/send-date-ledger-social.jpg 82441 bytes
+icon.svg 617 bytes
+icons/apple-touch-icon.png 21075 bytes
+icons/icon-192.png 18554 bytes
+icons/icon-512.png 21050 bytes
+icons/icon-maskable-512.png 16843 bytes
+index.html 2275 bytes
+legal.css 4538 bytes
+legal.js 758 bytes
+manifest.webmanifest 644 bytes
+offline.html 2619 bytes
+privacy/index.html 3653 bytes
+robots.txt 84 bytes
+sitemap.xml 388 bytes
+staticwebapp.config.json 2479 bytes
+sw.js 2481 bytes
+terms/index.html 3598 bytes

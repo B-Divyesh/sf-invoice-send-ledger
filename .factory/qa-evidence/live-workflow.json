@@ -1,0 +1,128 @@
+{
+  "checks": [
+    {
+      "label": "demo starts with three samples",
+      "evidence": ""
+    },
+    {
+      "label": "PDF reference extracted locally",
+      "evidence": ""
+    },
+    {
+      "label": "PDF amount extracted locally",
+      "evidence": ""
+    },
+    {
+      "label": "PDF extracted fields remain editable",
+      "evidence": ""
+    },
+    {
+      "label": "required-field failure focuses first field",
+      "evidence": ""
+    },
+    {
+      "label": "above-maximum amount rejected",
+      "evidence": "Value must be less than or equal to 999999999."
+    },
+    {
+      "label": "invalid issue-before-draft explained",
+      "evidence": "Issued time cannot be before the draft time. Sent time cannot be before the issued time."
+    },
+    {
+      "label": "invalid sent-before-issued explained",
+      "evidence": "Sent time cannot be before the issued time."
+    },
+    {
+      "label": "Net 60 calendar result crosses DST correctly",
+      "evidence": "May 09, 2026 · Net 60"
+    },
+    {
+      "label": "IANA zone remains visible",
+      "evidence": ""
+    },
+    {
+      "label": "HTML-like note remains inert text",
+      "evidence": ""
+    },
+    {
+      "label": "maximum amount saves and displays",
+      "evidence": ""
+    },
+    {
+      "label": "empty-month export gives recovery guidance",
+      "evidence": "No invoices were issued in February 2026."
+    },
+    {
+      "label": "monthly CSV has header plus one matching invoice",
+      "evidence": ""
+    },
+    {
+      "label": "CSV neutralizes formula-like invoice reference",
+      "evidence": ""
+    },
+    {
+      "label": "CSV includes calculated due date",
+      "evidence": ""
+    },
+    {
+      "label": "exported invoice becomes visibly sealed",
+      "evidence": ""
+    },
+    {
+      "label": "plain backup includes all demo records and export",
+      "evidence": ""
+    },
+    {
+      "label": "encrypted backup declares AES-256-GCM",
+      "evidence": ""
+    },
+    {
+      "label": "encrypted backup hides client text",
+      "evidence": ""
+    },
+    {
+      "label": "malformed restore gives actionable error",
+      "evidence": "This backup is not valid JSON."
+    },
+    {
+      "label": "restore failure stays recoverable in dialog",
+      "evidence": ""
+    },
+    {
+      "label": "restore failure leaves all records intact",
+      "evidence": ""
+    },
+    {
+      "label": "saved records survive reload",
+      "evidence": ""
+    },
+    {
+      "label": "sealed state survives reload",
+      "evidence": ""
+    },
+    {
+      "label": "entire workflow sends requests only to product origin",
+      "evidence": "https://invoice-send-ledger.sociobot.in"
+    },
+    {
+      "label": "workflow produces no console or page errors",
+      "evidence": ""
+    }
+  ],
+  "requests": [
+    "https://invoice-send-ledger.sociobot.in/demo",
+    "https://invoice-send-ledger.sociobot.in/assets/index-CKbY8eIK.js",
+    "https://invoice-send-ledger.sociobot.in/assets/index-E92yvaia.css",
+    "https://invoice-send-ledger.sociobot.in/assets/pdf-BRz36HYW.js",
+    "https://invoice-send-ledger.sociobot.in/assets/pdf.worker.min-CevBI0zc.js",
+    "https://invoice-send-ledger.sociobot.in/assets/pdf.worker.min-CHFwMXne.mjs"
+  ],
+  "origins": [
+    "https://invoice-send-ledger.sociobot.in"
+  ],
+  "errors": [],
+  "csvBytes": 287,
+  "plainInvoiceCount": 4,
+  "plainExportCount": 1,
+  "encryptedBytes": 5028
+}

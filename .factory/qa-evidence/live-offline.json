@@ -1,0 +1,10 @@
+{
+  "controllerBefore": "https://invoice-send-ledger.sociobot.in/sw.js",
+  "cachesBefore": [
+    "sdl-shell-v6-static",
+    "sdl-shell-v6-runtime"
+  ],
+  "offlineLabel": true,
+  "editRetainedAfterSecondOfflineReload": true,
+  "errors": []
+}
