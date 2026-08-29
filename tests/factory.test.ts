@@ -29,6 +29,18 @@ describe('factory acceptance records', () => {
     expect(config.routes.find((route: { route: string }) => route.route === '/assets/index-*').headers['Cache-Control']).toContain('immutable');
   });
 
+  it('serves every content-hashed PDF worker before the general asset rule with one-year immutable caching', () => {
+    const config = JSON.parse(readFileSync('public/staticwebapp.config.json', 'utf8'));
+    const workerRoute = config.routes.findIndex((route: { route: string }) => route.route === '/assets/pdf.worker.min-*');
+    const generalAssetRoute = config.routes.findIndex((route: { route: string }) => route.route === '/assets/*');
+
+    expect(workerRoute).toBeGreaterThanOrEqual(0);
+    expect(generalAssetRoute).toBeGreaterThan(workerRoute);
+    expect(config.routes[workerRoute].headers).toEqual({
+      'Cache-Control': 'public, max-age=31536000, immutable',
+    });
+  });
+
   it('keeps the catalog description verb-first and within 120 characters', () => {
     const copy = readFileSync('.factory/catalog-description.txt', 'utf8').trim();
     expect(copy.length).toBeLessThanOrEqual(120);

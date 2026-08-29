@@ -8,6 +8,7 @@
     { "route": "/privacy/*", "allowedRoles": ["anonymous"] },
     { "route": "/terms/*", "allowedRoles": ["anonymous"] },
     { "route": "/assets/index-*", "headers": { "Cache-Control": "public, max-age=31536000, immutable" } },
+    { "route": "/assets/pdf.worker.min-*", "headers": { "Cache-Control": "public, max-age=31536000, immutable" } },
     { "route": "/assets/pdf-*", "headers": { "Cache-Control": "public, max-age=31536000, immutable" } },
     { "route": "/assets/*", "allowedRoles": ["anonymous"] },
     { "route": "/icons/*", "allowedRoles": ["anonymous"] },
