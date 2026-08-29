@@ -1,6 +1,6 @@
-# Copy audit — polish 4
+# Copy audit — polish 5
 
-Audited 29 August 2026. Counts treat hyphenated terms and prices as one word. No sentence exceeds 22 words. No banned marketing term remains.
+Audited 29 August 2026. Counts treat hyphenated terms as one word. No sentence exceeds 22 words. No banned marketing term remains.
 
 | Surface | Copy | Words | Result |
 |---|---|---:|---|
@@ -12,7 +12,7 @@ Audited 29 August 2026. Counts treat hyphenated terms and prices as one word. No
 | Demo action note | Adds only to this sample record | 6 | Pass |
 | Fact | No analytics or advertising | 4 | Pass; claim `local-only` |
 | Fact | Edit offline after the first visit | 6 | Pass; claim `offline-reload` |
-| Fact | Date record: free · PDF storage: ₹699 once | 8 | Pass; claim `paid-pdf` |
+| Fact | PDF storage requires a verified license | 6 | Pass; claim `paid-pdf` |
 | Artwork caption | Drafted, issued, due, sent, and paid dates stay together. | 9 | Pass |
 | Empty state | No invoices recorded yet | 4 | Pass |
 | Empty state | Add the next invoice you are drafting, or record one already sent. | 12 | Pass |
@@ -24,8 +24,9 @@ Audited 29 August 2026. Counts treat hyphenated terms and prices as one word. No
 | Boundaries | It does not create invoices, calculate tax, take payments, or replace accounting records. | 13 | Pass |
 | Privacy | Invoice records stay in this browser. | 6 | Pass; claim `local-only` |
 | Privacy | The app sends no invoice data to a server. | 9 | Pass; claim `local-only` |
-| Plan | Invoice date records, monthly CSV exports, and backups are free. | 10 | Pass |
+| Plan | PDF storage requires a verified license. | 6 | Pass; claim `paid-pdf` |
 | Plan | Adds local PDF storage and includes PDFs in backups. | 9 | Pass; claim `paid-pdf` |
+| Plan state | Verified license | 2 | Pass; identifies the required state without a price or sale offer |
 | Footer | Record dates for invoices you create elsewhere. | 7 | Pass |
 | Demo banner | Demo — sample data, nothing is saved | 7 | Pass; claim `demo-isolation` |
 | Demo banner | Changes stay separate from your invoice records. | 7 | Pass; claim `demo-isolation` |
@@ -34,7 +35,7 @@ Audited 29 August 2026. Counts treat hyphenated terms and prices as one word. No
 | Limits eyebrow | Limits and privacy | 3 | Pass: names the section |
 | Header action | View PDF storage plan | 5 | Pass: action and feature use the stable term |
 | Required-field note | Required fields | 2 | Pass; explains the visible asterisk |
-| Catalog description | Track client invoice send dates in an offline record. | 9 | Pass: verb-first and under 120 characters |
+| Catalog description | Track client invoice send dates in one record. | 9 | Pass: verb-first and under 120 characters |
 
 ## Terminology
 
@@ -45,6 +46,6 @@ Audited 29 August 2026. Counts treat hyphenated terms and prices as one word. No
 | Downloaded month | monthly CSV export |
 | Export-protected date | sealed date |
 | Try-out environment | demo |
-| Paid attachment feature | PDF storage plan |
+| Licensed attachment feature | PDF storage plan |
 
 “Send-Date Ledger” appears only as the product name. Internal code type names and storage identifiers are not user-facing terminology.

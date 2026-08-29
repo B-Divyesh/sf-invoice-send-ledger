@@ -32,4 +32,17 @@ describe('factory acceptance records', () => {
     expect(copy.length).toBeLessThanOrEqual(120);
     expect(copy).toMatch(/^(Track|Record|Keep|Calculate|Export)\b/);
   });
+
+  it('does not advertise an unverified price, free tier, purchase, or artwork provenance', () => {
+    const visitorCopy = [
+      'src/app.ts',
+      'README.md',
+      'public/privacy/index.html',
+      'public/terms/index.html',
+      'public/404.html',
+      'public/offline.html',
+    ].map((path) => readFileSync(path, 'utf8')).join('\n');
+    expect(visitorCopy).not.toMatch(/₹699|one-time purchase|free date record|records are free|Ceramic artwork generated for this product/i);
+    expect(visitorCopy).toContain('PDF storage requires a verified license');
+  });
 });

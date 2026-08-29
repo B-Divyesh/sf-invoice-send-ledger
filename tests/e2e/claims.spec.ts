@@ -200,7 +200,7 @@ test('@claim:plain-backup downloads the complete portable record', async ({ page
   await page.screenshot({ path: evidence('claim-plain-backup') });
 });
 
-test('@claim:paid-pdf stores a PDF only after a cached valid license', async ({ page }) => {
+test('@claim:paid-pdf requires a verified license for PDF storage and includes PDFs in both backup formats', async ({ page }) => {
   await freshDemo(page);
   await page.getByRole('button', { name: 'Add invoice', exact: true }).click();
   await expect(page.getByLabel('Original invoice PDF')).toBeDisabled();
@@ -210,7 +210,7 @@ test('@claim:paid-pdf stores a PDF only after a cached valid license', async ({ 
     localStorage.setItem('demo:sb_license_verdict:invoice-send-ledger', JSON.stringify({ valid: true, reason: 'ok', checkedAt: Date.now() }));
   });
   await page.reload();
-  await expect(page.getByText('₹699 once', { exact: true })).toBeVisible();
+  await expect(page.getByText('PDF storage requires a verified license.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Add invoice', exact: true }).click();
   await page.getByLabel('Invoice reference').fill('PDF-PAID-1');
   await page.locator('#client').fill('Paper Trail Studio');

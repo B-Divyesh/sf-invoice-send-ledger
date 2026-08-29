@@ -84,7 +84,7 @@ function renderShell(): void {
     <footer>
       <p><span class="footer-mark" aria-hidden="true"></span> Record dates for invoices you create elsewhere.</p>
       <nav aria-label="Footer"><a href="/demo">Demo</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav>
-      <p class="disclosure">Built by Param Factory · build polish-4 · Ceramic artwork generated for this product with Azure OpenAI.</p>
+      <p class="disclosure">Built by Param Factory · build polish-5</p>
     </footer>
     ${invoiceDialogMarkup()}
     ${exportDialogMarkup()}
@@ -117,7 +117,7 @@ function landingMainMarkup(): string {
             <span class="action-explainer">${DEMO_MODE ? 'Adds only to this sample record' : 'Opens three sample invoices'}</span>
           </div>
           <div class="secondary-actions">${DEMO_MODE ? '' : '<button class="text-button" id="manual-invoice-button" type="button">Add invoice manually</button>'}<button class="text-button" id="import-pdf-button" type="button">Import invoice PDF</button><input id="import-pdf-input" type="file" accept="application/pdf,.pdf" hidden><button class="text-button" id="backup-button" type="button">Back up or restore</button></div>
-          <ul class="plain-facts"><li>No analytics or advertising</li><li>Edit offline after the first visit</li><li>Date record: free · PDF storage: ₹699 once</li></ul>
+          <ul class="plain-facts"><li>No analytics or advertising</li><li>Edit offline after the first visit</li><li>PDF storage requires a verified license</li></ul>
         </div>
         <figure class="hero-figure">
           <img src="/assets/ceramic-ledger.webp" width="1200" height="800" alt="Five handmade porcelain tiles arranged in date order" decoding="async" fetchpriority="high" />
@@ -154,7 +154,7 @@ function demoMainMarkup(): string {
 function informationSectionsMarkup(): string {
   return `<section class="explain-section" aria-labelledby="how-title"><p class="eyebrow">Three steps</p><h2 id="how-title">How it works</h2><ol class="steps"><li><strong>Record the invoice</strong><span>Enter the details or read them from a PDF in this browser.</span></li><li><strong>Add each date</strong><span>Choose a due rule, then record when you issue, send, and get paid.</span></li><li><strong>Export the month</strong><span>Download a monthly CSV. Dates in that export become sealed.</span></li></ol></section>
     <section class="limits-section" aria-labelledby="limits-title"><div><p class="eyebrow">Limits and privacy</p><h2 id="limits-title">What this does not do and where data stays</h2></div><div><p>It does not create invoices, calculate tax, take payments, or replace accounting records.</p><p>Invoice records stay in this browser. The app sends no invoice data to a server.</p></div></section>
-    <section class="price-section" aria-labelledby="price-title"><div><p class="eyebrow">PDF storage plan</p><h2 id="price-title">Keep the sent PDF with its dates</h2><p>Invoice date records, monthly CSV exports, and backups are free.</p></div><div class="price-slip"><strong>₹699 once</strong><span>Adds local PDF storage and includes PDFs in backups.</span><button class="quiet-button" id="price-plan-button" type="button">View PDF storage plan</button></div></section>`;
+    <section class="price-section" aria-labelledby="price-title"><div><p class="eyebrow">PDF storage plan</p><h2 id="price-title">Keep the sent PDF with its dates</h2><p>PDF storage requires a verified license.</p></div><div class="price-slip"><strong>Verified license</strong><span>Adds local PDF storage and includes PDFs in backups.</span><button class="quiet-button" id="price-plan-button" type="button">View PDF storage plan</button></div></section>`;
 }
 
 function invoiceDialogMarkup(): string {
@@ -234,9 +234,8 @@ function settingsDialogMarkup(): string {
   return `
     <dialog id="settings-dialog" class="dialog studio-dialog" aria-labelledby="studio-title">
       <div class="dialog-heading"><div><p class="eyebrow">Existing license feature</p><h2 id="studio-title">PDF storage plan</h2></div><button class="icon-button dialog-close" type="button" data-close="settings-dialog" aria-label="Close PDF storage plan"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
-      <div class="studio-price"><span>Lifetime, this version</span><strong>₹699</strong></div>
-      <p class="dialog-intro">Invoice records, monthly CSV exports, backups, and accessibility features stay free. This plan adds PDF storage in this browser.</p>
-      <ul class="feature-list"><li><span aria-hidden="true">✓</span> Attach invoice PDFs up to 10 MB</li><li><span aria-hidden="true">✓</span> PDFs included in plain and encrypted backups</li><li><span aria-hidden="true">✓</span> One-time purchase—no subscription</li></ul>
+      <p class="dialog-intro">PDF storage requires a verified license. It stores invoice PDFs in this browser.</p>
+      <ul class="feature-list"><li><span aria-hidden="true">✓</span> Attach invoice PDFs up to 10 MB</li><li><span aria-hidden="true">✓</span> PDFs included in plain and encrypted backups</li></ul>
       <div id="license-status" class="license-status"></div>
       <p class="checkout-paused" id="buy-link">Verify a license below to add PDF storage.</p>
       <div class="license-restore"><h3>Have a license?</h3><label for="license-token">Paste your license token</label><div class="input-button"><input id="license-token" autocomplete="off" spellcheck="false" /><button class="quiet-button" id="restore-license" type="button">Verify</button></div><button class="text-button small" id="remove-license" type="button" hidden>Remove license from this device</button></div>
@@ -766,7 +765,7 @@ function updateLicenseUi(unlocked: boolean, reason?: string): void {
     ? '<span class="license-good" aria-hidden="true">✓</span><div><strong>PDF storage is active</strong><span>PDF attachments can be stored in this browser.</span></div>'
     : reason && reason !== 'ok'
       ? `<span class="license-warning" aria-hidden="true">!</span><div><strong>License no longer active</strong><span>${escapeHtml(reason.replaceAll('_', ' '))}. You can restore another license below.</span></div>`
-      : '<div><strong>Free date record active</strong><span>Invoice dates, monthly CSV exports, and backups are ready.</span></div>';
+      : '<div><strong>PDF storage locked</strong><span>Verify a license below to store invoice PDFs.</span></div>';
   toggleHidden('#buy-link', unlocked);
   toggleHidden('#remove-license', !licenseState().token);
 }

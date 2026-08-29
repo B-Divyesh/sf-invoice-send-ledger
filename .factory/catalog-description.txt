@@ -1,1 +1,1 @@
-Track client invoice send dates in an offline record.
+Track client invoice send dates in one record.

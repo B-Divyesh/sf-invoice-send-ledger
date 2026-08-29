@@ -19,7 +19,7 @@ It records invoice dates. It does not create invoices, calculate tax, take payme
 - Edits records offline after the first visit.
 - Stops a stale tab from overwriting a newer invoice date.
 
-Invoice date records are free. A ₹699 one-time plan adds PDF storage in this browser.
+PDF storage requires a verified license.
 
 ## Try the isolated demo
 

@@ -9,14 +9,14 @@ test('root and demo have route titles, metadata, focus, and working back navigat
   await expect(page).toHaveTitle('Send-Date Ledger — track invoice send dates');
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(page.locator('h1')).toBeFocused();
-  await expect(page.locator('footer')).toContainText('Built by Param Factory · build polish-4');
+  await expect(page.locator('footer')).toContainText('Built by Param Factory · build polish-5');
   await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /send-date-ledger-social\.jpg$/);
   expect((await page.request.get('/assets/send-date-ledger-social.jpg')).status()).toBe(200);
   await page.getByRole('link', { name: 'Demo' }).first().click();
   await expect(page).toHaveURL(/\/demo$/);
   await expect(page).toHaveTitle('Demo — Send-Date Ledger');
   await expect(page.locator('h1')).toBeFocused();
-  await expect(page.locator('footer')).toContainText('Built by Param Factory · build polish-4');
+  await expect(page.locator('footer')).toContainText('Built by Param Factory · build polish-5');
   await page.goBack();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.locator('h1')).toBeFocused();
@@ -38,6 +38,8 @@ test('demo shows a named sample invoice in the first viewport and keeps PDF plan
   await expect(page.getByText('PDF plan', { exact: true })).toHaveCount(0);
   await expect(page.getByText('Clear boundaries', { exact: true })).toHaveCount(0);
   await expect(page.getByText('New licenses are not for sale.', { exact: true })).toHaveCount(0);
+  await expect(page.getByText(/₹699|one-time purchase/i)).toHaveCount(0);
+  await expect(page.getByText('Ceramic artwork generated for this product with Azure OpenAI.', { exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: 'View PDF storage plan' }).first().click();
   await expect(page.getByText(/License sales and refunds are handled by Sociobot\/Dodo/)).toHaveCount(0);
   await expect(page.getByText(/A refund revokes the license/)).toHaveCount(0);
@@ -72,10 +74,11 @@ for (const route of [
     await expect(page.locator('main')).toHaveCount(1);
     await expect(page.locator('h1')).toHaveCount(1);
     await expect(page.getByRole('heading', { level: 1, name: route.heading })).toBeFocused();
-    await expect(page.locator('footer')).toContainText('Built by Param Factory · build polish-4');
+    await expect(page.locator('footer')).toContainText('Built by Param Factory · build polish-5');
     await expect(page.getByRole('link', { name: 'Demo' }).first()).toHaveAttribute('href', '/demo');
     await expect(page.getByRole('link', { name: 'Privacy', exact: true }).first()).toHaveAttribute('href', '/privacy/');
     await expect(page.getByText('New licenses are not for sale.', { exact: true })).toHaveCount(0);
+    await expect(page.getByText(/₹699|one-time purchase/i)).toHaveCount(0);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', route.canonical);
     await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', route.canonical);
     await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', /send-date-ledger-social\.jpg$/);
