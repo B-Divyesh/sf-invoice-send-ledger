@@ -1,6 +1,6 @@
-# Copy audit — polish 3
+# Copy audit — polish 4
 
-Audited 28 August 2026. Counts treat hyphenated terms and prices as one word. No sentence exceeds 22 words. No banned marketing term remains.
+Audited 29 August 2026. Counts treat hyphenated terms and prices as one word. No sentence exceeds 22 words. No banned marketing term remains.
 
 | Surface | Copy | Words | Result |
 |---|---|---:|---|
@@ -30,9 +30,11 @@ Audited 28 August 2026. Counts treat hyphenated terms and prices as one word. No
 | Demo banner | Demo — sample data, nothing is saved | 7 | Pass; claim `demo-isolation` |
 | Demo banner | Changes stay separate from your invoice records. | 7 | Pass; claim `demo-isolation` |
 | Plan notice | Verify a license below to add PDF storage. | 8 | Pass; claims `license-privacy`, `paid-pdf` |
+| PDF plan links | Privacy · Terms | 2 | Pass; replaces the unsupported merchant, refund, and revocation statement |
 | Limits eyebrow | Limits and privacy | 3 | Pass: names the section |
 | Header action | View PDF storage plan | 5 | Pass: action and feature use the stable term |
 | Required-field note | Required fields | 2 | Pass; explains the visible asterisk |
+| Catalog description | Track client invoice send dates in an offline record. | 9 | Pass: verb-first and under 120 characters |
 
 ## Terminology
 

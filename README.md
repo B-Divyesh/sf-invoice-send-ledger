@@ -65,7 +65,7 @@ Valid existing licenses can be pasted into the PDF storage plan. Verification se
 
 - [Visual system and artwork provenance](.factory/design.md)
 - [Demo behavior](.factory/demo.md)
-- [Repair evidence](.factory/polish-3.md)
+- [Repair evidence](.factory/polish-4.md)
 - [Handoff](.factory/handoff.md)
 
 ## License

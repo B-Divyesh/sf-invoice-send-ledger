@@ -1,0 +1,7 @@
+{
+  "origin": "https://invoice-send-ledger.sociobot.in",
+  "errorsBeforeIntentional404": [],
+  "externalRequests": [],
+  "checks": "root/demo/query demo/isolation/reset/exit/legal/fallback metadata/footer/404/axe",
+  "timestamp": "2026-08-29T03:22:59.344Z"
+}
