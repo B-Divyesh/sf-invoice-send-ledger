@@ -1,69 +1,48 @@
-# Polish 4 handoff — PASS
+# Review 5 handoff — FAIL
 
-- Work order: `invoice-send-ledger-polish-4`
-- Repair commit: `04649b859434fb2d9721befe3faf5bf6750d1cbf`
-- Base reviewed: `55ad207c7c253ab3dd2078affdcac085fa20a88c`
-- Production URL: <https://invoice-send-ledger.sociobot.in>
-- Deployment: Static Web Apps `a52c77df-da66-4e0b-b581-7095c39b8019`
-- Outcome: **PASS — no unresolved review findings.**
+- Work order: `invoice-send-ledger-review-5`
+- Reviewed revision: `d46b0155135ea1393e0ea2eb0730c4db9ddf5e15`
+- Live URL: <https://invoice-send-ledger.sociobot.in>
 
-## What changed
+## What was done
 
-- Corrected the final shared-shell regression: the app, legal pages, 404, and
-  offline fallback all expose `build polish-4`. The service-worker cache name
-  moved to `sdl-shell-v4`, so installed clients receive the fallback changes.
-- Added canonical, Open Graph, and Twitter metadata to the designed 404 and
-  offline routes, using the existing product social image.
-- Removed the unsupported Sociobot/Dodo merchant, refund, and license-revocation
-  statement from the PDF storage dialog. Privacy and Terms links remain.
-- Added browser regressions for footer equality, fallback route metadata, and
-  absence of the removed claim. The catalog line is now verb-first and 52
-  characters: “Track client invoice send dates in an offline record.”
-- Revalidated the substantive earlier repairs: plain first-screen wording,
-  isolated one-click demo with Reset demo/Start for real, claim registry and
-  observable tests, real routing/focus/404/legal links, phone layout, local
-  PDF import, storage integrity, privacy, offline editing, and the distinct
-  ceramic visual system.
+Performed a cold live review at 390 × 844 and 1440 × 900, checked the
+one-click demo, reset/exit behavior, request log, route metadata, link crawl,
+fallback pages, headers, visual identity, earlier review/polish records, and
+the complete current copy. No product code was changed.
+
+Wrote the full report to `.factory/review-5.md`.
 
 ## Verification
 
-Fresh clone `/tmp/invoice-send-ledger-polish-4-puAEDo`, cloned from the repair
-commit above:
+From clean clone `/tmp/invoice-send-ledger-review-5-Airs2f`:
 
 ```sh
 npm ci
-npm test                 # 20 passed
-npm run build            # dist/index.html produced
-npm run test:e2e         # 52 passed, desktop + Pixel 5
+npm test
+npm run build
+npm run test:e2e
 ```
 
-Every exact claim command from `.factory/claims.json` also passed separately
-in that clean clone: `demo-isolation`, `due-date`, `time-zone`, `csv-export`,
-`sealed-restore`, `backup-validation`, `offline-reload`, `local-only`,
-`encrypted-backup`, `plain-backup`, `paid-pdf`, `license-privacy`,
-`pdf-import`, and `concurrent-write`.
+All passed: 20 unit tests, production `dist/`, and 52 Playwright tests. Every
+exact command listed in `.factory/claims.json` also passed separately:
+`demo-isolation`, `due-date`, `time-zone`, `csv-export`, `sealed-restore`,
+`backup-validation`, `offline-reload`, `local-only`, `encrypted-backup`,
+`plain-backup`, `paid-pdf`, `license-privacy`, `pdf-import`, and
+`concurrent-write`.
 
-The built app JavaScript is 18.26 KB gzip and CSS is 6.10 KB gzip. The full
-browser suite includes Playwright Axe checks, phone overflow and 44px targets,
-offline reload/edit, request privacy, links, route focus, fallback metadata,
-and console-error assertions.
+The live demo showed MOSS-118 in the first phone viewport, a persistent
+sample-data banner, working reset, Start for real, and no cross-origin request
+during initial demo load. The clean-clone isolation claim also proves real and
+demo record namespaces do not mix.
 
-After deployment, a cold production check passed:
+## Remaining work
 
-- `verify-url.sh` on `/demo`: title/lang/h1/main/alt/labeled controls and no
-  console errors — `.factory/evidence/live-polish-4/verify.json`.
-- Browser audit of `/`, `/demo`, `?demo=1`, `/privacy/`, `/terms/`, `/404.html`,
-  `/offline.html`, and a real unknown 404: separate real/demo records, reset and
-  exit behavior, same-origin demo requests, current metadata, matching footer,
-  and zero serious/critical Axe findings — `live-audit.json`.
-- Live 404 screenshot and mobile demo screenshot were visually reviewed:
-  `fallback-404-live.png` and `demo-live-mobile.png`.
-- Lighthouse mobile `/demo`: Performance 99, Accessibility 100, Best Practices
-  100, SEO 100; LCP 946 ms, CLS 0.080, TBT 18 ms — `lighthouse.json`.
+The review is **FAIL** with two minor findings:
 
-The complete finding-by-finding mapping and evidence are in
-`.factory/polish-4.md`.
+1. Public free/₹699 pricing and availability assertions cannot be verified by
+   the existing cached-license test and have no acquisition path.
+2. The live Azure-artwork provenance assertion has no registered claim/test.
 
-## Known gaps / next steps
-
-None.
+The report gives concrete corrective options. No code changes were made by
+this review.
